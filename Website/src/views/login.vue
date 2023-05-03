@@ -1,0 +1,187 @@
+<script setup>
+import { ref } from 'vue';
+const login = ref({
+    username: "",
+    password: ""
+})
+
+</script>
+
+<template>
+
+<div class="headline">
+    <h1>Velkommen</h1>
+    <p>Vennligst skriv inn brukernavn og passord</p>
+</div>
+
+<div class="login">
+    <h2>Brukernavn</h2>
+    <input v-model="login.username" type="text" color="black">
+    <h2>Passord</h2>
+    <input v-model="login.password" type="password" color="black">
+
+    <button class="login_button">Logg inn</button>
+
+    <button class="google"><img src="../components/Bilder/google_icon.svg" alt="">Logg inn med Google</button>
+
+    <p>Ikke bruker? Registrer nå</p>
+    
+</div>
+</template>
+
+<style scoped>
+
+
+.headline {
+    margin-left: 35%;
+    padding-bottom: 1rem;
+}
+.headline h1 {
+    color: black;
+    font-size: 64px;
+}
+
+.headline p {
+    color: black;
+    font-size: 24px;
+}
+
+
+.login {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    margin-left: 35%;
+    gap: 1rem;
+}
+
+.login h2 {
+    font-size: 30px;
+}
+
+.login input {
+    border-radius: 10;
+    height: 40px;
+    padding-left: 0.5rem;
+    font-size: 24px;
+}
+
+.login_button, .google {
+    border-radius: 10;
+    font-size: 20px;
+    font-weight: bold; 
+    padding: 0.6rem 1.1rem;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.login_button:hover, .google:hover {
+    opacity: 0.8;
+    border-color: pink;
+}
+
+.login_button {
+    background-color: var(--blue);
+    color: white;
+}
+
+.google {
+    background-color: white;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+
+img {
+    max-width:  25px;
+    max-height: 25px;
+    justify-content: center;
+    align-items: center;
+}
+
+</style>
+
+
+
+
+<style scoped>
+
+
+@media only screen and (max-width: 400px) { 
+.headline {
+    margin-left: 4rem;
+    padding-bottom: 3rem;
+    padding-top: 2rem;
+}
+.headline h1 {
+    color: black;
+    font-size: 36px;
+    padding-bottom: 0.5rem;
+}
+
+.headline p {
+    color: black;
+    font-size: 24px;
+}
+
+
+.login {
+    display: flex;
+    flex-direction: column;
+    width: 15rem;
+    gap: 1rem;
+    margin-left: 28%;
+    padding-bottom: 12.7rem;
+}
+
+.login h2 {
+    font-size: 24px;
+}
+
+.login input {
+    border-radius: 10;
+    height: 40px;
+    padding-left: 0.5rem;
+    font-size: 20px;
+}
+
+.login_button, .google {
+    border-radius: 10;
+    font-size: 12px;
+    font-weight: bold; 
+    padding: 0.6rem 1.1rem;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.login_button:hover, .google:hover {
+    opacity: 0.8;
+    border-color: pink;
+}
+
+.login_button {
+    background-color: var(--blue);
+    color: white;
+}
+
+.google {
+    background-color: white;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+
+img {
+    max-width:  25px;
+    max-height: 25px;
+    justify-content: center;
+    align-items: center;
+}
+
+}
+
+</style>

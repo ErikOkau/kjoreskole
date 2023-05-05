@@ -1,5 +1,4 @@
 <script setup>
-
 import { RouterView } from 'vue-router';
 import NavBar from './components/NavBar.vue'
 import Footer from './components/Footer.vue'
@@ -9,11 +8,14 @@ import Buttons from './components/Buttons.vue'
 </script>
 
 <template>
-  <NavBar/>
+
+<NavBar/>
 
 <div class="router">
    <RouterView />
 </div>
+
+<Footer />
  
 </template>
 
@@ -28,12 +30,12 @@ import Buttons from './components/Buttons.vue'
 
 <style scoped>
 
-@media only screen and (max-width: 400px) { 
-
-  .router { 
-  padding: 0rem 0rem; 
+@media only screen and (max-width: 400px) {
+.router { 
+  padding: 0rem 0em; 
 } 
 
 }
+
 
 </style>

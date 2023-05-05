@@ -47,7 +47,7 @@ const licenceTypes = [
                 <option class="font1">Fullførte kurs</option>
                 <option class="font">Trafikalt grunnkurs</option>
                 <option class="font">Mørkekjøring</option>
-                <option class="font">Trafikalt + mørkekjøring</option>
+                <option class="font">Begge kurs</option>
             </select>
             
         </div>

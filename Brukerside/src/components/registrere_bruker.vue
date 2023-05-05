@@ -1,15 +1,33 @@
 <script setup>
 import { ref } from 'vue';
-const login = ref({
-    email: "",
-    username: "",
-    password: ""
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { auth } from '../firebase/firebase.js';
+
+const registrationForm = ref({
+  email: "",
+  username: "",
+  password: ""
 })
+
+async function registerUser() {
+  try {
+    const { email, password, username } = registrationForm.value
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+    const user = userCredential.user
+    console.log("Successfully registered user:", user.email)
+    // Update user profile display name
+    await updateProfile(user, { displayName: username })
+    console.log("Successfully updated user profile:", user.displayName)
+    // TODO: Redirect to a logged-in page or update UI to show logged-in state
+  } catch (error) {
+    alert("Failed to register user. " + error.message)
+    // TODO: Show error message to user
+  }
+}
 
 </script>
 
 <template>
-
 <div class="headline">
     <h1>Velkommen</h1>
     <p>Vennligst skriv inn email, brukernavn og passord for å registrere ny bruker</p>
@@ -17,13 +35,13 @@ const login = ref({
 
 <div class="register">
     <h2>Email</h2>
-    <input v-model="login.email" type="text" color="black">
+    <input v-model="registrationForm.email" type="text" color="black">
     <h2>Brukernavn</h2>
-    <input v-model="login.username" type="text" color="black">
+    <input v-model="registrationForm.username" type="text" color="black">
     <h2>Passord</h2>
-    <input v-model="login.password" type="password" color="black">
+    <input v-model="registrationForm.password" type="password" color="black">
 
-    <button class="register_button">Registrer bruker</button>
+    <button class="register_button" @click="registerUser()">Registrer bruker</button>
 
 </div>
 </template>

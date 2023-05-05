@@ -18,8 +18,6 @@ const login = ref({
 <div class="login">
     <h2>Email</h2>
     <input v-model="login.email" type="text" color="black">
-    <h2>Brukernavn</h2>
-    <input v-model="login.username" type="text" color="black">
     <h2>Passord</h2>
     <input v-model="login.password" type="password" color="black">
 

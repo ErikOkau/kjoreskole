@@ -4,7 +4,7 @@ import { RouterView } from 'vue-router';
 import NavBar from './components/NavBar.vue'
 import Footer from './components/Footer.vue'
 import Buttons from './components/Buttons.vue'
-import ChatBot from './components/ChatBot.vue'
+
 
 </script>
 

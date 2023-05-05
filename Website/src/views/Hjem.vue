@@ -88,10 +88,10 @@ const licenceTypes = [
 
     <div class="instruktører">
         <div class="bilder">
-            <img src="">
-            <img src="">
-            <img src="">
-            <img src="">
+            <img src="../components/Bilder/Erik_instruktør.jpg">
+            <img src="../components/Bilder/Erik_instruktør.jpg">
+            <img src="../components/Bilder/Erik_instruktør.jpg">
+            <img src="../components/Bilder/Erik_instruktør.jpg">
         </div>
     </div>
 

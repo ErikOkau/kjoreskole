@@ -1,10 +1,34 @@
 <script setup>
 import { ref } from 'vue';
-const login = ref({
-    email: "",
+import { 
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    updateProfile,
+} from 'firebase/auth'
+import { auth } from '../firebase/firebase.js' 
+
+const loginForm = ref({
     username: "",
-    password: ""
+    password: "",
+    email: ""
 })
+
+
+async function login() {
+  try {
+    const { email, password } = loginForm.value
+    const userCredential = await signInWithEmailAndPassword(auth, email, password)
+    const user = userCredential.user
+    console.log("Successfully logged in as:", user.email)
+    // Redirect to logged-in page
+    router.push('/')
+    // TODO: Redirect to a logged-in page or update UI to show logged-in state
+  } catch (error) {
+    alert("Feil email eller passord", error)
+    // TODO: Show error message to user
+  }
+}   
+
 
 </script>
 
@@ -12,20 +36,16 @@ const login = ref({
 
 <div class="headline">
     <h1>Velkommen</h1>
-    <p>Vennligst skriv inn email, brukernavn og passord for å registrere ny bruker</p>
+    <p>Vennligst skriv inn brukernavn og passord</p>
 </div>
 
 <div class="login">
-    <h2>Email</h2>
-    <input v-model="login.email" type="text" color="black">
-    <h2>Brukernavn</h2>
-    <input v-model="login.username" type="text" color="black">
+    <h2>E-postadresse</h2>
+    <input v-model="loginForm.email" type="email" color="black">
     <h2>Passord</h2>
-    <input v-model="login.password" type="password" color="black">
+    <input v-model="loginForm.password" type="password" color="black">
 
-    <button class="login_button">Registrer bruker</button>
-
-    <button class="google"><img src="../components/Bilder/google_icon.svg" alt="">Registrer med Google</button>
+    <button class="login_button" @click="login">Logg inn</button>
 
     <div class="Registrere_bruker">
         <RouterLink to="/signup">Ikke bruker? Registrer nå</RouterLink>
@@ -41,7 +61,6 @@ const login = ref({
     margin-left: 35%;
     padding-bottom: 1rem;
 }
-
 .headline h1 {
     color: black;
     font-size: 64px;
@@ -50,7 +69,6 @@ const login = ref({
 .headline p {
     color: black;
     font-size: 24px;
-    max-width: 32rem;
 }
 
 
@@ -130,7 +148,7 @@ img {
 
 @media only screen and (max-width: 400px) { 
 .headline {
-    margin-left: 6.7rem;
+    margin-left: 7rem;
     padding-bottom: 3rem;
     padding-top: 2rem;
     max-width: 350px;
@@ -144,6 +162,7 @@ img {
 .headline p {
     color: black;
     font-size: 18px;
+    max-width: 15rem;
 }
 
 

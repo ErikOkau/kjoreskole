@@ -1,9 +1,34 @@
 <script setup>
 import { ref } from 'vue';
-const login = ref({
+import { 
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    updateProfile,
+} from 'firebase/auth'
+import { auth } from '../firebase/firebase.js' 
+
+const loginForm = ref({
     username: "",
-    password: ""
+    password: "",
+    email: ""
 })
+
+
+async function login() {
+  try {
+    const { email, password } = loginForm.value
+    const userCredential = await signInWithEmailAndPassword(auth, email, password)
+    const user = userCredential.user
+    console.log("Successfully logged in as:", user.email)
+    // Redirect to logged-in page
+    router.push('/')
+    // TODO: Redirect to a logged-in page or update UI to show logged-in state
+  } catch (error) {
+    alert("Feil email eller passord", error)
+    // TODO: Show error message to user
+  }
+}   
+
 
 </script>
 
@@ -15,14 +40,12 @@ const login = ref({
 </div>
 
 <div class="login">
-    <h2>Brukernavn</h2>
-    <input v-model="login.username" type="text" color="black">
+    <h2>E-postadresse</h2>
+    <input v-model="loginForm.email" type="email" color="black">
     <h2>Passord</h2>
-    <input v-model="login.password" type="password" color="black">
+    <input v-model="loginForm.password" type="password" color="black">
 
-    <button class="login_button">Logg inn</button>
-
-    <button class="google"><img src="../components/Bilder/google_icon.svg" alt="">Logg inn med Google</button>
+    <button class="login_button" @click="login">Logg inn</button>
 
     <div class="Registrere_bruker">
         <RouterLink to="/signup">Ikke bruker? Registrer nå</RouterLink>

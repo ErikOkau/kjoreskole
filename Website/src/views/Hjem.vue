@@ -1,6 +1,22 @@
 <script setup>
 import Buttons from '../components/Buttons.vue'
 
+const licenceTypes = [
+    {
+        name:"Erik Sørheim",
+        imgSrc: ""
+    },
+    {
+
+    },
+    {
+
+    },
+    {
+        
+    }
+]
+
 </script>
 
 <template>
@@ -69,6 +85,17 @@ import Buttons from '../components/Buttons.vue'
             <li class="en"><p>MC - Grunnkurs</p><p>1.319,-</p></li>
         </div>
     </div>
+
+    <div class="instruktører">
+        <div class="bilder">
+            <img src="">
+            <img src="">
+            <img src="">
+            <img src="">
+        </div>
+    </div>
+
+
 </template>
 
 

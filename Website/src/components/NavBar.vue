@@ -12,9 +12,9 @@ import Buttons from '../components/Buttons.vue'
                 <div class="logo">
                     <RouterLink to="/">Rask & Tidig</RouterLink>
                 </div>
-
+        
                 <div class="login">
-                    <RouterLink to="login">Logg inn</RouterLink>
+                    <a href="/bruker">Logg inn</a>
                 </div>
                 
             <Buttons class="bestill" />

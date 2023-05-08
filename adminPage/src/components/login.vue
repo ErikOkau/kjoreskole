@@ -1,14 +1,14 @@
 <script setup>
 import { ref } from 'vue';
+import router  from "../router"
 import { 
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     updateProfile,
 } from 'firebase/auth'
-import { auth } from '../firebase/firebase.js' 
+import { auth } from '../firebase/firebase.js'
 
 const loginForm = ref({
-    username: "",
     password: "",
     email: ""
 })
@@ -21,7 +21,7 @@ async function login() {
     const user = userCredential.user
     console.log("Successfully logged in as:", user.email)
     // Redirect to logged-in page
-    router.push('/')
+    router.push("/")
     // TODO: Redirect to a logged-in page or update UI to show logged-in state
   } catch (error) {
     alert("Feil email eller passord", error)
@@ -50,7 +50,6 @@ async function login() {
     <div class="Registrere_bruker">
         <RouterLink to="/signup">Ikke bruker? Registrer nå</RouterLink>
     </div>
-    
 </div>
 </template>
 
@@ -148,7 +147,7 @@ img {
 
 @media only screen and (max-width: 400px) { 
 .headline {
-    margin-left: 7rem;
+    margin-left: 6rem;
     padding-bottom: 3rem;
     padding-top: 2rem;
     max-width: 350px;
@@ -171,7 +170,7 @@ img {
     flex-direction: column;
     width: 15rem;
     gap: 1rem;
-    margin-left: 28%;
+    margin-left: 6rem;
     padding-bottom: 12.7rem;
 }
 

@@ -1,15 +1,37 @@
 <script setup>
-import { ref } from 'vue';
-const login = ref({
-    email: "",
-    username: "",
-    password: ""
+import { ref } from 'vue'
+import router  from "../router"
+import { 
+    createUserWithEmailAndPassword, 
+    updateProfile 
+} from 'firebase/auth'
+import { auth } from '../firebase/firebase.js'
+
+const registrationForm = ref({
+  email: "",
+  password: ""
 })
+
+async function registerUser() {
+  try {
+    const { email, password, username } = registrationForm.value
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+    const user = userCredential.user
+    console.log("Successfully registered user:", user.email)
+    // Update user profile display name
+    await updateProfile(user, { displayName: username })
+    console.log("Successfully updated user profile:", user.displayName)
+    // Redirect to the homepage
+    router.push("/")
+  } catch (error) {
+    alert("Failed to register user. " + error.message)
+    // TODO: Show error message to user
+  }
+}
 
 </script>
 
 <template>
-
 <div class="headline">
     <h1>Velkommen</h1>
     <p>Vennligst skriv inn email, brukernavn og passord for å registrere ny bruker</p>
@@ -17,13 +39,11 @@ const login = ref({
 
 <div class="register">
     <h2>Email</h2>
-    <input v-model="login.email" type="text" color="black">
-    <h2>Brukernavn</h2>
-    <input v-model="login.username" type="text" color="black">
+    <input v-model="registrationForm.email" type="text" color="black">
     <h2>Passord</h2>
-    <input v-model="login.password" type="password" color="black">
+    <input v-model="registrationForm.password" type="password" color="black">
 
-    <button class="register_button">Registrer bruker</button>
+    <button class="register_button" @click="registerUser()">Registrer bruker</button>
 
 </div>
 </template>
@@ -124,10 +144,10 @@ img {
 
 @media only screen and (max-width: 400px) { 
 .headline {
-    margin-left: 6.7rem;
+    margin-left: 6rem;
     padding-bottom: 3rem;
     padding-top: 2rem;
-    max-width: 350px;
+    max-width: 250px;
 }
 .headline h1 {
     color: black;
@@ -146,7 +166,7 @@ img {
     flex-direction: column;
     width: 15rem;
     gap: 1rem;
-    margin-left: 28%;
+    margin-left: 6rem;
     padding-bottom: 12.7rem;
 }
 

@@ -1,19 +1,24 @@
 <script setup>
 import Buttons from '../components/Buttons.vue'
+import Instructor from '../components/instructor.vue'
 
-const licenceTypes = [
+
+const instructor = [
     {
         name:"Erik Sørheim",
-        imgSrc: ""
+        imgSrc: "/src/components/Bilder/Erik_instruktør.jpg"
     },
     {
-
+        name:"Erik Mikkelborg",
+        imgSrc: "/src/components/Bilder/Erik_instruktør.jpg"
     },
     {
-
+        name:"Erik Johnsen",
+        imgSrc: "/src/components/Bilder/Erik_instruktør.jpg"
     },
     {
-        
+        name:"Erik M. Sørheim",
+        imgSrc: "/src/components/Bilder/Erik_instruktør.jpg"
     }
 ]
 
@@ -87,11 +92,10 @@ const licenceTypes = [
     </div>
 
     <div class="instruktører">
-        <div class="bilder">
-            <img src="../components/Bilder/Erik_instruktør.jpg">
-            <img src="../components/Bilder/Erik_instruktør.jpg">
-            <img src="../components/Bilder/Erik_instruktør.jpg">
-            <img src="../components/Bilder/Erik_instruktør.jpg">
+        <h2 class="våre_instruktører">Våre instruktører</h2>
+
+        <div class="wrap-instruktør">
+            <Instructor v-for="item in instructor" :name="item.name" :img-src="item.imgSrc" />
         </div>
     </div>
 
@@ -212,6 +216,22 @@ const licenceTypes = [
     padding-right: 8px;
 }
 
+
+.wrap-instruktør {
+    display: flex;
+    flex-direction: row;
+    flex-direction: wrap;
+
+    gap: 5rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+}
+
+.instruktører {
+    padding-top: 5rem;
+    font-size: 24px;
+}
 
 
 </style>
@@ -341,6 +361,26 @@ const licenceTypes = [
     padding-bottom: 5rem;
 }
 
+
+
+.wrap-instruktør {
+    display: flex;
+    flex-direction: row;
+    flex-direction: wrap;
+
+    gap: 2rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+
+}
+
+.instruktører {
+    padding-top: 5rem;
+    font-size: 18px;
+    padding-left: 4rem;
+}
 
 }
 

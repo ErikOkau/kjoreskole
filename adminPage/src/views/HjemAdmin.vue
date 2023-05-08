@@ -2,6 +2,8 @@
 import Buttons from '/Github/kjoreskole/Website/src/components/Buttons.vue'
 
 import Input from '../components/input.vue'
+import { ref } from "vue"
+
 
 </script>
 

@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HjemAdmin from '../views/HjemAdmin.vue'
-import login from '../views/login.vue'
-import signup from '../views/registrere_bruker.vue'
+
 
 
 const router = createRouter({
@@ -15,12 +14,12 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: login
+      component: () => import('../components/login.vue')
     },
     {
       path: '/signup',
       name: 'signup',
-      component: signup
+      component: () => import('../components/registrere_bruker.vue')
     }
 
   ]

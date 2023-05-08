@@ -4,7 +4,7 @@
 </script>
 
 <template>
-    <RouterLink to="/Bestill">
+    <RouterLink to="/">
     <button class="button"><p>Bestill time nå</p></button>
     </RouterLink>   
 </template>

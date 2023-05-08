@@ -1,6 +1,22 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
 import Buttons from '../components/Buttons.vue'
+import { auth } from '../firebase/firebase.js'
+import { ref } from "vue"
+
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+
+const loggedIn = ref(false)
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("logged in")
+    loggedIn.value = true
+  } else {
+    console.log("not logged in")
+    loggedIn.value = false
+  }
+})
 
 </script>
 
@@ -13,10 +29,15 @@ import Buttons from '../components/Buttons.vue'
                     <RouterLink to="/">Rask & Tidig</RouterLink>
                 </div>
 
-                <div class="login">
-                    <RouterLink to="login">Logg inn</RouterLink>
+                <div class="login" v-if="!loggedIn">
+                    <RouterLink to="login" >Logg inn</RouterLink>
+                </div>
+
+                <div class="login" v-if="loggedIn">
+                    <a @click="signOut(auth)" >Logg ut</a>
                 </div>
                 
+            
             <Buttons class="bestill" />
             
         </nav>
@@ -55,6 +76,7 @@ import Buttons from '../components/Buttons.vue'
     text-decoration: underline;
     list-style: none;
     color: black;
+    cursor: pointer;
 }
 
 .login a:hover {
@@ -95,6 +117,7 @@ import Buttons from '../components/Buttons.vue'
     text-decoration: underline;
     list-style: none;
     color: black;
+    cursor: pointer;
 }
 
 .login a:hover {

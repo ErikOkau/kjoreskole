@@ -6,19 +6,23 @@ import Instructor from '../components/instructor.vue'
 const instructor = [
     {
         name:"Erik Sørheim",
-        imgSrc: "/src/components/Bilder/Erik_instruktør.jpg"
+        imgSrc: "/src/components/Bilder/Erik_instruktør.jpg",
+        type: "Personbil (B)"
     },
     {
         name:"Erik Mikkelborg",
-        imgSrc: "/src/components/Bilder/Erik_instruktør.jpg"
+        imgSrc: "/src/components/Bilder/Erik_instruktør.jpg",
+        type: "Lettsykkel (A1)"
     },
     {
         name:"Erik Johnsen",
-        imgSrc: "/src/components/Bilder/Erik_instruktør.jpg"
+        imgSrc: "/src/components/Bilder/Erik_instruktør.jpg",
+        type: "Motorsykkel (A2)"
     },
     {
         name:"Erik M. Sørheim",
-        imgSrc: "/src/components/Bilder/Erik_instruktør.jpg"
+        imgSrc: "/src/components/Bilder/Erik_instruktør.jpg",
+        type: "Tung (A)"
     }
 ]
 
@@ -95,7 +99,7 @@ const instructor = [
         <h2 class="våre_instruktører">Våre instruktører</h2>
 
         <div class="wrap-instruktør">
-            <Instructor v-for="item in instructor" :name="item.name" :img-src="item.imgSrc" />
+            <Instructor v-for="item in instructor" :name="item.name" :img-src="item.imgSrc" :type="item.type" />
         </div>
     </div>
 
@@ -232,7 +236,6 @@ const instructor = [
     padding-top: 5rem;
     font-size: 24px;
 }
-
 
 </style>
 

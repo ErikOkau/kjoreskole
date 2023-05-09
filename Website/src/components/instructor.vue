@@ -2,8 +2,8 @@
 
 const props = defineProps({
     name:String,
-    imgSrc:String
-
+    imgSrc:String,
+    type:String
 })
 
 </script>
@@ -12,6 +12,7 @@ const props = defineProps({
 <div class="wrapper">
     <img :src="imgSrc">
     <p>{{ name }}</p>
+    <p class="opacity_p">{{ type }}</p>
 </div>
 </template>
 
@@ -28,6 +29,10 @@ const props = defineProps({
     background-color: lightgrey;
     width: 250px;
     height: 250px;
+}
+
+.opacity_p {
+    opacity: 0.5;
 }
 
 </style>

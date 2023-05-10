@@ -6,7 +6,7 @@ import {
     createUserWithEmailAndPassword,
     updateProfile,
 } from 'firebase/auth'
-import { auth } from '../firebase/firebase.js' 
+import { auth } from '../firebase/firebase.js'
 
 const loginForm = ref({
     password: "",

@@ -34,7 +34,7 @@ async function registerUser() {
 <template>
 <div class="headline">
     <h1>Velkommen</h1>
-    <p>Vennligst skriv inn email, brukernavn og passord for å registrere ny bruker</p>
+    <p>Vennligst skriv inn email og passord for å registrere ny bruker</p>
 </div>
 
 <div class="register">

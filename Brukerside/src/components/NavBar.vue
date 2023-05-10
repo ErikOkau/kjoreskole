@@ -76,6 +76,7 @@ onAuthStateChanged(auth, (user) => {
     text-decoration: underline;
     list-style: none;
     color: black;
+    cursor: pointer;
 }
 
 .login a:hover {
@@ -116,6 +117,7 @@ onAuthStateChanged(auth, (user) => {
     text-decoration: underline;
     list-style: none;
     color: black;
+    cursor: pointer;
 }
 
 .login a:hover {

@@ -1,12 +1,12 @@
 <script setup>
+
 import Input from '../components/input.vue'
 import LicenceTypes from '../components/licenceTypes.vue';
-var tester
-function test(){
-console.log('penger')
-console.log(tester)
-}
+import RadioInput from '../components/radioInput.vue';
 
+import { ref } from 'vue'
+
+    // define the licence types
 const licenceTypes = [
     {
         name:"Personbil (B)",
@@ -25,6 +25,21 @@ const licenceTypes = [
         imgSrc: "/src/components/Bilder/Tung_motorsykkel_transformed-removebg-preview 2.png"
     },
 ]
+
+const form = ref({
+    Fornavn: "",
+    Etternavn: "",
+    Bursdag: "",
+    Mail: "",
+    Mobilnumber: "",
+    Fullførte_kurs: ""
+})
+
+const selectedOption = ref(null)
+
+function test() {
+    console.log(form.value)
+}
 </script>
 
 <template>
@@ -38,12 +53,12 @@ const licenceTypes = [
         </div>
 
         <div class="forms">
-            <Input placeholder="Fornavn" type='text' color="black"/>
-            <Input placeholder="Etternavn" type='text' color="black"/>
-            <Input type='date' color="black"/>
-            <Input placeholder="Epost" type="email" id="email" pattern=".+@globex\.com" color="var(--blue)" placeholder-color="var(--blue)"/>
-            <Input placeholder="Telefon" type="tel" id="phone" name="phone" color="var(--blue)" placeholder-color="var(--blue)"/>
-            <select class="select_dropdown">
+            <Input placeholder="Fornavn" type='text' color="black" v-model="form.Fornavn"/>
+            <Input placeholder="Etternavn" type='text' color="black" v-model="form.Etternavn"/>
+            <Input type='date' color="black" v-model="form.Bursdag"/>
+            <Input placeholder="Epost" type="email" id="email" color="var(--blue)" placeholder-color="var(--blue)" v-model="form.Mail"/>
+            <Input placeholder="Telefon" type="text" id="phone" name="phone" color="var(--blue)" placeholder-color="var(--blue)" v-model="form.Mobilnumber"/>
+            <select class="select_dropdown" v-model="form.Fullførte_kurs">
                 <option class="font1">Fullførte kurs</option>
                 <option class="font">Trafikalt grunnkurs</option>
                 <option class="font">Mørkekjøring</option>
@@ -54,18 +69,19 @@ const licenceTypes = [
 
         <div class="licencetypes">
             <h1>Type førerkort</h1>
+            <p>Trykk på hvilke kjøretimer du vil ha -- {{ selectedOption }}</p>
 
             <div class="wrap-bilder">
-                <LicenceTypes v-for="item in licenceTypes" :name="item.name" :img-src="item.imgSrc" />
+                <RadioInput v-for="item in licenceTypes" name="førerkort" :img-src="item.imgSrc" :id="item.name" v-model="selectedOption"/>
             </div>
         </div>
         
-        
+        <div class="button_flex">
+            <button class="submit">Send inn</button>
+        </div>
     </form>
 
-    <div class="button_flex">
-        <button class="submit">Send inn</button>
-    </div>
+    
     
 
 </template>
@@ -118,14 +134,18 @@ form {
 }
 
 
-.wrap-bilder {
+.wrap-bilder{
     display: flex;
     flex-direction: row;
-    flex-direction: wrap;
+    flex-wrap: wrap;
 
     gap: 5rem;
     padding-top: 2rem;
     padding-bottom: 2rem;
+}
+
+.wrap-bilder div {
+    flex: 1 1 13.5rem;
 }
 
 .font1 {
@@ -153,6 +173,12 @@ form {
     padding-top: 5rem;
     font-size: 24px;
 }
+
+.licencetypes h1 {
+    padding-bottom: 0.5rem;
+}
+
+
 
 </style>
 
@@ -228,6 +254,10 @@ form {
     flex-wrap: wrap;
     justify-content: center;
 
+}
+
+.wrap-bilder div {
+    flex: 1 1 9rem;
 }
 
 

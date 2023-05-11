@@ -21,11 +21,11 @@ async function registerUser() {
     // Update user profile display name
     await updateProfile(user, { displayName: username })
     console.log("Successfully updated user profile:", user.displayName)
-    // Redirect to the homepage
+    // Redirect to homepage
     router.push("/")
   } catch (error) {
+    // Show error message to user
     alert("Failed to register user. " + error.message)
-    // TODO: Show error message to user
   }
 }
 

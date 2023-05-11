@@ -48,6 +48,9 @@ const emit = defineEmits(['update:modelValue'])
 
 .Input:checked + .radioLabel {
     border: 2px solid #000;
+    border-radius: 10;
+    opacity: 1;
+    background-size: 11rem;
 }
 
 </style>
@@ -58,14 +61,21 @@ const emit = defineEmits(['update:modelValue'])
 
     .radioLabel {
     display: inline-block;
-    width: 7rem;
-    height: 7rem;
+    width: 9rem;
+    height: 9rem;
     background-size: cover;
 
-    background-size: 7rem;
+    background-size: 9rem;
     background-repeat: no-repeat;
     background-position: 50%;
     user-select: none;
+}
+
+.Input:checked + .radioLabel {
+    border: 2px solid #000;
+    border-radius: 10;
+    opacity: 1;
+    background-size: 10rem;
 }
 
 }

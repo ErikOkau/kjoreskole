@@ -53,8 +53,8 @@ const props = defineProps({
 .wrapper img {
     border-radius: 50%;
     background-color: lightgrey;
-    width: 140px;
-    height: 140px;
+    width: 130px;
+    height: 130px;
 }
 
 

@@ -32,7 +32,6 @@ import Buttons from '../components/Buttons.vue'
     width: 100%;
     padding: 1rem;
     background-color: white;
-    
 }
 
 .logo a{
@@ -70,33 +69,42 @@ import Buttons from '../components/Buttons.vue'
 @media only screen and (max-width: 400px) {
 
 .navbar {  
-    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    width: none;
+    padding: 0rem;
+    background-color: white;
+    flex-wrap: wrap;
     background-color: white;   
 }
 
 .logo a{
     color: var(--blue);
-    margin-left: 3rem;
+    margin-left: 0.5rem;
     font-size: 20px;
     font-weight: bold;
     text-decoration: none;
 }
 
 
+
 .bestill {
-    padding-right: 1rem;
- 
+    padding: 0.5rem;
+}
+
+.login {
+    padding: 0.5rem;
+}
+
+.logo {
+    padding: 0.5rem;
 }
 
 .login a{
     font-size: 12px;
-    padding-left: 0.5rem;
-    font-weight: bold;
-    text-decoration: underline;
-    list-style: none;
-    color: black;
+    padding-left: 0rem;
 }
-
 .login a:hover {
     opacity: 0.7;
     transition: 0.2s ease-in-out;

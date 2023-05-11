@@ -4,6 +4,10 @@ import Input from '../components/input.vue'
 import LicenceTypes from '../components/licenceTypes.vue';
 import RadioInput from '../components/radioInput.vue';
 
+import { collection, setDoc, doc } from 'firebase/firestore'
+
+import { db, auth } from '../firebase/firebase.js'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { ref } from 'vue'
 
     // define the licence types
@@ -25,6 +29,9 @@ const licenceTypes = [
         imgSrc: "/src/components/Bilder/Tung_motorsykkel_transformed-removebg-preview 2.png"
     },
 ]
+const selectedOption = ref(null)
+
+const formSend = ref(false)
 
 const form = ref({
     Fornavn: "",
@@ -32,20 +39,57 @@ const form = ref({
     Bursdag: "",
     Mail: "",
     Mobilnumber: "",
-    Fullførte_kurs: ""
+    Fullførte_kurs: "",
 })
 
-const selectedOption = ref(null)
+const formRef = collection(db, 'Forms')
 
-function test() {
-    console.log(form.value)
+const message = ref('')
+
+
+
+
+async function sendForm() {
+    const { Fornavn, Etternavn, Bursdag, Mail, Mobilnumber, Fullførte_kurs } = form.value
+
+    let user
+    
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, Mail, Mobilnumber)
+        user = userCredential.user
+    } catch {
+        message.value = "Invalid Email"
+        formSend.value = true
+        return
+    }
+
+
+    try {
+        await setDoc(doc(formRef, user.uid), {
+            Fornavn,
+            Etternavn,
+            Bursdag,
+            Mail,
+            Mobilnumber,
+            Fullførte_kurs,
+            Førerkort: selectedOption.value,
+        })
+        formSend.value = true
+
+        message.value = 'Bestillingen ble sendt inn! Logg inn med epost og tlf. for å se bestillingen din'
+    } catch (error) {
+      message.value = 'Noe gikk galt, prøv igjen senere' + error.message
+      formSend.value = true
+    }
 }
+
+
 </script>
 
 <template>
 
     <form
-    @submit.prevent="test"
+    @submit.prevent="sendForm"
     >
         <div class="headliner">
             <h1>Bestill time</h1>
@@ -69,7 +113,7 @@ function test() {
 
         <div class="licencetypes">
             <h1>Type førerkort</h1>
-            <p>Trykk på hvilke kjøretimer du vil ha -- {{ selectedOption }}</p>
+            <p>Trykk på hvilke kjøretimer du vil ha -- <span>{{ selectedOption }}</span></p>
 
             <div class="wrap-bilder">
                 <RadioInput v-for="item in licenceTypes" name="førerkort" :img-src="item.imgSrc" :id="item.name" v-model="selectedOption"/>
@@ -77,12 +121,16 @@ function test() {
         </div>
         
         <div class="button_flex">
-            <button class="submit">Send inn</button>
+            <button :disabled="formSend" class="submit">Send inn</button>
         </div>
+        
+        <div class="bekreftelse_flex">
+            <div class="bekreftelse" v-if="formSend">
+                <p>{{ message }}</p>
+            </div>
+        </div>
+      
     </form>
-
-    
-    
 
 </template>
 
@@ -119,7 +167,6 @@ form {
 }
 
 
-
 .submit:hover {
     opacity: 70%;
     cursor: pointer;
@@ -138,10 +185,11 @@ form {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-
-    gap: 5rem;
-    padding-top: 2rem;
+    font-size: 18px;
+    gap: 3rem;
+    padding-top: 3rem;
     padding-bottom: 2rem;
+    text-align: center;
 }
 
 .wrap-bilder div {
@@ -176,6 +224,32 @@ form {
 
 .licencetypes h1 {
     padding-bottom: 0.5rem;
+}
+
+.licencetypes span {
+    color: var(--blue);
+    font-weight: bold;
+}
+
+.button_flex {
+    padding-left: 4rem;
+    padding-bottom: 3rem;
+    user-select: none;
+}
+
+.bekreftelse {
+    border: 2px solid;
+    text-align: center;
+    padding: 1rem;
+    color: var(--blue);
+    font-size: 24px;
+    font-weight: bold;
+    width: 93%;
+    user-select: none;
+}
+
+.bekreftelse span {
+    color: black;
 }
 
 
@@ -223,9 +297,24 @@ form {
 
 .button_flex {
     padding-left: 4rem;
-    padding-bottom: 5rem;
+    padding-bottom: 3rem;
+    user-select: none;
 }
 
+.bekreftelse {
+    border: 2px solid;
+    text-align: center;
+    padding: 1rem;
+    color: var(--blue);
+    font-size: 18px;
+    font-weight: bold;
+    width: 93%;
+}
+
+.bekreftelse_flex {
+    margin-left: 4rem;
+    margin-right: 1rem;
+}
 
 .submit:hover {
     opacity: 70%;

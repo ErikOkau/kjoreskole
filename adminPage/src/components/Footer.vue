@@ -23,15 +23,14 @@
                         <h3>Kontakt oss</h3>
                         <ul>
                             <li><a href="#">Tlf: 960 44 191</a></li>
-                            <li><a href="#">E-post: erikmsorheim@yahoo.no</a></li>
+                            <li><a href="#">E-post: <br> erikmsorheim@yahoo.no</a></li>
                         </ul>
                     </div>
                     <div class="kolonne">
                         <ul>
                             <li><a href="#">Til toppen</a></li>
-                            <li><a href="#">Personvern</a></li>
                         </ul>
-                  </div>
+                   </div>
               </div>  
           </footer>
       </div>
@@ -90,6 +89,12 @@
   margin-right: 7rem;
 }
 
+.kolonne li {
+  font-size: 24px;
+  color: white;
+  font-weight: bold;
+}
+
 </style>
 
 
@@ -104,19 +109,19 @@
   padding:50px 0;
   background-color: black;
   color: white;
-  width: 53.5vh;
+  margin-top: 3rem;
 }
 
 .footer h3 {
   margin-bottom: 8px;
   font-weight:bold;
-  font-size:16px;
+  font-size:14px;
 }
 
 .footer ul {
   list-style:none;
   line-height:1.6;
-  font-size:14px;
+  font-size:12px;
 }
 
 .footer ul p {
@@ -135,14 +140,19 @@
 
 .container {
     display: flex;
-    background-color: black;
-    margin-left: 2rem;
-    justify-content: space-between;
-    gap: 2rem;
+    background-color: black;  
 }
 
 .footer .item.social > a:hover {
   opacity:0.9;
+}
+
+.adresse, .kontakt, .kolonne {
+    margin-bottom: 2rem;
+  }
+
+.kolonne {
+  display: none;
 }
 
 }

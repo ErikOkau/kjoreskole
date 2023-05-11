@@ -29,6 +29,8 @@ const instructor = [
 </script>
 
 <template>
+<main>
+
     <div class="flex">
         <div class="headline">
             <h1>Kjøreskole</h1>
@@ -103,7 +105,7 @@ const instructor = [
         </div>
     </div>
 
-
+</main>
 </template>
 
 
@@ -244,15 +246,23 @@ const instructor = [
 <style scoped>
 
 @media only screen and (max-width: 400px) {
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 
 .bil {
     height: 10rem;
-    width: 25rem;
-    padding-top: 2rem;
+    width: 24rem;
+    padding-top: 2rem; 
+    margin-right: 0%;
 }
 
 .headline {
     font-weight: bold;
+    align-self: center;
 }
 
 .headline h1 {
@@ -294,13 +304,13 @@ const instructor = [
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    margin-left: 4rem;
+    margin-left: 0rem;
     padding-top: 2rem;
 }
 
 .flex2 {
     padding-top: 5rem;
-    margin-left: 4rem;
+    margin-left: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -314,13 +324,8 @@ const instructor = [
 
 
 .priser {
-    color: black;
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
-    list-style: none;
-    font-weight: 1000;
-    padding-left: 4rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 }
 
 .priser li  {
@@ -336,8 +341,8 @@ const instructor = [
 .headline_priser {
     padding-top: 5rem;
     padding-bottom: 1rem;
-    padding-left: 4rem;
     font-size: 24px;
+    padding-right: 16rem;
 }
 
 .en, .to {
@@ -379,10 +384,14 @@ const instructor = [
 
 }
 
+
 .instruktører {
     padding-top: 5rem;
-    font-size: 18px;
-    padding-left: 4rem;
+    font-size: 16px;
+}
+
+.våre_instruktører {
+    padding-left: 2.3rem;
 }
 
 }

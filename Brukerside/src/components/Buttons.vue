@@ -12,6 +12,7 @@
 <style scoped>
 
 .button {
+    user-select: none;
     border-radius: 10;
     font-size: 24px;
     background-color: #2C008B;

@@ -42,17 +42,6 @@ const formRef = collection(db, 'Kjøretimer')
 const message = ref('')
 const formSend = ref(false)
 
-function validateForm() {
-  const { Elev, Type_førerkort, Dato, Tid, Sted, Adresse } = form.value
-  if (!Elev || !Type_førerkort || !Dato || !Tid || !Sted || !Adresse) {
-    message.value = 'Fyll ut alle feltene'
-    return false
-  } else {
-    message.value = ''
-    return true
-  }
-}
-
 
 async function sendForm() {
     const { Elev, Type_førerkort, Dato, Tid, Sted, Adresse } = form.value
@@ -90,6 +79,16 @@ async function sendForm() {
 }
 
 
+async function deleteForm(index) {
+    try {
+        await deleteDoc(doc(formRef, forms.value[index].id))
+        forms.value.splice(index, 1)
+        localStorage.setItem('forms', JSON.stringify(forms.value))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 const mappedForms = computed(() => {
     return forms.value.map((form) => {
@@ -100,6 +99,7 @@ const mappedForms = computed(() => {
         }
     })
 })
+
     
 
 </script>
@@ -113,7 +113,6 @@ const mappedForms = computed(() => {
             <div class="header">
                 <h1>Kjøretimer</h1>
             </div>
-
             <div class="flexer2">
                 <div class="tittel">
                     <h2>Timer</h2>
@@ -128,6 +127,7 @@ const mappedForms = computed(() => {
                                 <th>Tid</th>
                                 <th>Sted</th>
                                 <th>Adresse</th>
+                                <th>Fullført</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -138,6 +138,9 @@ const mappedForms = computed(() => {
                                 <td>{{ form.Tid }}</td>
                                 <td>{{ form.Sted }}</td>
                                 <td>{{ form.Adresse }}</td>
+                                <td>
+                                    <button class="delete" @click="deleteForm(index)">Fullført</button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

@@ -78,11 +78,10 @@ async function sendForm() {
     }
 }
 
-
-async function deleteForm(index) {
+async function deleteForm(formIndex) {
     try {
-        await deleteDoc(doc(formRef, forms.value[index].id))
-        forms.value.splice(index, 1)
+        await deleteDoc(doc(formRef, forms.value[formIndex].id))
+        forms.value.splice(formIndex, 1)
         localStorage.setItem('forms', JSON.stringify(forms.value))
     } catch (error) {
         console.log(error)
@@ -139,7 +138,7 @@ const mappedForms = computed(() => {
                                 <td>{{ form.Sted }}</td>
                                 <td>{{ form.Adresse }}</td>
                                 <td>
-                                    <button class="delete" @click="deleteForm(index)">Fullført</button>
+                                    <button class="delete" @click="deleteForm(formIndex)">Fullført</button>
                                 </td>
                             </tr>
                         </tbody>

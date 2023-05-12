@@ -24,6 +24,8 @@
             })
         });
 
+        
+
         console.log(forms.value) // Logging the 'forms' array to the console
     });
 
@@ -35,41 +37,6 @@
         Sted: "",
         Adresse: "",
     })
-
-    const formRef = collection(db, 'Kjøretimer') // Creating a reference to the 'Kjøretimer' collection in Firestore
-
-    const message = ref('') // Creating a reactive reference for the error message
-
-    async function sendForm() { // Function to send form data to Firestore
-        const { Elev, Type_førerkort, Dato, Tid, Sted, Adresse } = form.value // Destructuring the values from the 'form' object
-
-        try {
-            await setDoc(doc(formRef), { // Adding a new document to the 'Kjøretimer' collection with the form data
-                elevId: Elev,
-                Type_førerkort,
-                Dato,
-                Tid,
-                Sted,
-                Adresse,
-            })
-
-            // push data to forms array
-            forms.value.push({ // Adding the form data to the 'forms' array
-                id: doc.id,
-                Elev,
-                Type_førerkort,
-                Dato,
-                Tid,
-                Sted,
-                Adresse,
-            })
-
-            localStorage.setItem('forms', JSON.stringify(forms.value)) // Saving the 'forms' array to local storage
-
-        } catch (error) {
-            message.value = error.message // Setting the error message
-        }
-    }
 
 
     const mappedForms = computed(() => { // Creating a computed property for the 'mappedForms' array
@@ -110,7 +77,6 @@
                     </thead>
                     <tbody>
                         <tr v-for="form in mappedForms" :key="form.id">
-                            <td>{{ form.Elev }}</td>
                             <td>{{ form.Type_førerkort }}</td>
                             <td>{{ form.Dato }}</td>
                             <td>{{ form.Tid }}</td>

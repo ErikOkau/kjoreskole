@@ -91,7 +91,7 @@
     <div class="flex">
         <div class="headline">
             <h1>Dine timer</h1>
-            <h3>Nedenfor kan du se fullførte timer <br> og fremtidige timer</h3>
+            <h3>Nedenfor kan du se dine fremtidige timer</h3>
         </div>
 
         <div class="fremtidige_timer">

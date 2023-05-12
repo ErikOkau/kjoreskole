@@ -22,10 +22,9 @@ async function login() {
     console.log("Successfully logged in as:", user.email)
     // Redirect to logged-in page
     router.push("/")
-    // TODO: Redirect to a logged-in page or update UI to show logged-in state
   } catch (error) {
+    // Show error message to user
     alert("Feil email eller passord", error)
-    // TODO: Show error message to user
   }
 }   
 
@@ -147,7 +146,7 @@ img {
 
 @media only screen and (max-width: 400px) { 
 .headline {
-    margin-left: 6rem;
+    margin-left: 5rem;
     padding-bottom: 3rem;
     padding-top: 2rem;
     max-width: 350px;
@@ -170,7 +169,7 @@ img {
     flex-direction: column;
     width: 15rem;
     gap: 1rem;
-    margin-left: 6rem;
+    margin-left: 5rem;
     padding-bottom: 12.7rem;
 }
 

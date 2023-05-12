@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HjemAdmin from '../views/HjemAdmin.vue'
+import Website from '/Github/kjoreskole/Website/src/views/Hjem.vue'
 
 
 
@@ -20,7 +21,12 @@ const router = createRouter({
       path: '/signup',
       name: 'signup',
       component: () => import('../components/registrere_bruker.vue')
-    }
+    },
+    {
+      path: '/website',
+      name: 'website',
+      component: Website
+    },
 
   ]
 })

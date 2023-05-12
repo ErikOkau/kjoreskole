@@ -1,55 +1,148 @@
 <script setup>
-import Buttons from '/Github/kjoreskole/Website/src/components/Buttons.vue'
 
 import Input from '../components/input.vue'
-import { ref } from "vue"
+
+import { collection, setDoc, doc, getDocs } from 'firebase/firestore'
+
+import { db, auth } from '../firebase/firebase.js'
+import { ref, onMounted } from "vue"
+
+const brukere = ref([])
+
+onMounted(async () => {
+    const querySnapshot = await getDocs(collection(db, "brukere"));
+    querySnapshot.forEach((doc) => {
+        brukere.value.push({
+            id: doc.id,
+            ...doc.data()
+        })
+    });
+
+    console.log(brukere.value)
+});
+
+
+const formSend = ref(false)
+
+const form = ref({
+    Elev: "0",
+    Type_førerkort: "0",
+    Dato: "",
+    Tid: "",
+    Sted: "",
+    Adresse: "",
+})
+
+const formRef = collection(db, 'Kjøretimer')
+
+const message = ref('')
+
+
+async function sendForm() {
+    const { Elev, Type_førerkort, Dato, Tid, Sted, Adresse } = form.value
+
+    try {
+        await setDoc(doc(formRef), {
+            elevId: Elev,
+            Type_førerkort,
+            Dato,
+            Tid,
+            Sted,
+            Adresse,
+        })
+
+        formSend.value = true
+
+        message.value = 'Time lagt til!'
+    } catch (error){
+        message.value = 'Noe gikk galt, prøv igjen senere' + error.message
+        formSend.value = true
+    }
+}
 
 
 </script>
 
 <template>
 
-    <div class="flexer">
-        <div class="header">
-            <h1>Kjøretimer</h1>
-        </div>
+    <form
+    @submit.prevent="sendForm"
+    >
+        <div class="flexer">
+            <div class="header">
+                <h1>Kjøretimer</h1>
+            </div>
 
-        <div class="flexer2">
-            <div class="tittel">
-                <h2>Timer</h2>
+            <div class="flexer2">
+                <div class="tittel">
+                    <h2>Timer</h2>
+                </div>
+                <div class="tabell">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Elev</th>
+                                <th>Type førerkort</th>
+                                <th>Dato</th>
+                                <th>Tid</th>
+                                <th>Sted</th>
+                                <th>Adresse</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="forms in form">
+                                <td>{{ forms.Elev }}</td>
+                                <td>{{ forms.Type_førerkort }}</td>
+                                <td>{{ forms.Dato }}</td>
+                                <td>{{ forms.Tid }}</td>
+                                <td>{{ forms.Sted }}</td>
+                                <td>{{ forms.Adresse }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        
+
+            <div class="flex">
+
+                <div class="tittel">
+                    <h2>Legg til ny time</h2>
+                </div>
+
+                <div class="forms">
+                    <select class="select_dropdown" v-model="form.Elev">
+                        <option class="font1" value="0">Velg elev</option>
+                        <option class="font" :value="bruker.id" v-for="bruker in brukere">{{  bruker.Fornavn + " " + bruker.Etternavn }}</option>
+                    </select> 
+                    <select class="select_dropdown" v-model="form.Type_førerkort">
+                        <option class="font1" value="0">Type førerkort</option>
+                        <option class="font" value="B">Personbil (B)</option>
+                        <option class="font" value="A1">Lett motorsykkel (A1)</option>
+                        <option class="font" value="A2">Motorsykkel (A2)</option>
+                        <option class="font" value="A">Tung motorsykkel (A)</option>
+                    </select>  
+                    <Input type='date' color="black" v-model="form.Dato"/>
+                    <Input type='time' color="var(--blue)" placeholder-color="var(--blue)" v-model="form.Tid"/>
+                    <Input placeholder="Sted" type='text' color="var(--blue)" placeholder-color="var(--blue)" v-model="form.Sted"/>
+                    <Input placeholder="Adresse" type='text' color="var(--blue)" placeholder-color="var(--blue)" v-model="form.Adresse"/>  
+                </div>
+        
+                <div class="submit_flex">
+                    <button :disabled="formSend" class="submit">Legg til time</button>
+                </div>
                 
-            </div>
-            <div class="tabell">
 
+                <div class="bekreftelse_flex">
+                    <div class="bekreftelse" v-if="formSend">
+                        <p>{{ message }}</p>
+                    </div>
+                </div>
             </div>
-        </div>
+        </div> 
+
+    </form>
     
-
-        <div class="flex">
-
-            <div class="tittel">
-                <h2>Legg til ny time</h2>
-            </div>
-
-            <div class="forms">
-                <Input placeholder="Elev" type='text' color="black"/>
-                <select class="select_dropdown">
-                    <option class="font1">Type førerkort</option>
-                    <option class="font">Personbil (B)</option>
-                    <option class="font">Lett motorsykkel (A1)</option>
-                    <option class="font">Motorsykkel (A2)</option>
-                    <option class="font">Tung motorsykkel (A)</option>
-                </select>  
-                <Input type='date' color="black"/>
-                <Input type='time' color="var(--blue)" placeholder-color="var(--blue)"/>
-                <Input placeholder="Sted" type='text' color="var(--blue)" placeholder-color="var(--blue)"/>
-                <Input placeholder="Adresse" type='text' color="var(--blue)" placeholder-color="var(--blue)"/>  
-            </div>
-    
-            <button class="submit">Legg til time</button>
-
-        </div>
-    </div>  
 
 </template>
 
@@ -71,6 +164,22 @@ import { ref } from "vue"
 .tittel p {
     font-size: 2rem;
     padding-top: 1rem;
+}
+
+.bekreftelse {
+    border: 2px solid;
+    text-align: center;
+    font-size: 18px;
+   
+    border: 2px solid;
+    text-align: center;
+    padding: 0rem;
+    
+    user-select: none;
+}
+
+.bekreftelse_flex {
+    padding-left: 1rem;
 }
 
 </style>
@@ -209,7 +318,7 @@ form {
 
 
 .select_dropdown {
-    width: 21rem;
+    width: 22rem;
 }
 
 .font1 {
@@ -256,7 +365,7 @@ form {
     display: flex;
     flex-direction: column;
     gap: 3rem;
-    padding-left: 3rem;
+    padding-left: 1rem;
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
@@ -266,6 +375,22 @@ form {
 
 .tittel {
     font-size: 24px;
+}
+
+.bekreftelse {
+    border: 2px solid;
+    text-align: center;
+    font-size: 18px;
+   
+    border: 2px solid;
+    text-align: center;
+    padding: 0rem;
+    
+    user-select: none;
+}
+
+.bekreftelse_flex {
+    padding-left: 1rem;
 }
 
 }

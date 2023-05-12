@@ -24,8 +24,8 @@ async function registerUser() {
     // Redirect to the homepage
     router.push("/")
   } catch (error) {
+    // Show error message to user
     alert("Failed to register user. " + error.message)
-    // TODO: Show error message to user
   }
 }
 

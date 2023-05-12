@@ -42,7 +42,7 @@ const form = ref({
     Fullførte_kurs: "",
 })
 
-const formRef = collection(db, 'Forms')
+const formRef = collection(db, 'brukere')
 
 const message = ref('')
 
@@ -76,7 +76,7 @@ async function sendForm() {
         })
         formSend.value = true
 
-        message.value = 'Bestillingen ble sendt inn! Logg inn med epost og tlf. for å se bestillingen din'
+        message.value = 'Bestillingen ble sendt inn! Logg inn med epost og tlf som passord for å se bestillingen din'
     } catch (error) {
       message.value = 'Noe gikk galt, prøv igjen senere' + error.message
       formSend.value = true
@@ -107,8 +107,7 @@ async function sendForm() {
                 <option class="font">Trafikalt grunnkurs</option>
                 <option class="font">Mørkekjøring</option>
                 <option class="font">Begge kurs</option>
-            </select>
-            
+            </select>  
         </div>
 
         <div class="licencetypes">
@@ -177,7 +176,7 @@ form {
     color: black;
     display: flex;
     flex-wrap: wrap;
-    gap: 3rem;
+    gap: 3rem;    
 }
 
 
@@ -214,7 +213,7 @@ form {
     color: var(--blue);
     border-width: 4px;   
     font-size: 36px;
-    width: 400px;
+    width: 25rem;
 }
 
 .licencetypes {
@@ -264,13 +263,13 @@ form {
 
     
 form {
-    max-width: 50rem;
+    max-width: 55rem;
 }
 
 .headliner {
     padding-top: 2rem;
     padding-bottom: 3rem;
-    padding-left: 4rem;
+    padding-left: 1rem;
 }
 .headliner h1 {
     font-size: 36px;
@@ -296,7 +295,7 @@ form {
 }
 
 .button_flex {
-    padding-left: 4rem;
+    padding-left: 1rem;
     padding-bottom: 3rem;
     user-select: none;
 }
@@ -304,16 +303,17 @@ form {
 .bekreftelse {
     border: 2px solid;
     text-align: center;
-    padding: 1rem;
-    color: var(--blue);
     font-size: 18px;
-    font-weight: bold;
-    width: 93%;
+   
+    border: 2px solid;
+    text-align: center;
+    padding: 0rem;
+    
+    user-select: none;
 }
 
 .bekreftelse_flex {
-    margin-left: 4rem;
-    margin-right: 1rem;
+    padding-left: 1rem;
 }
 
 .submit:hover {
@@ -327,7 +327,7 @@ form {
     display: flex;
     flex-wrap: wrap;
     gap: 3rem;
-    padding-left: 4rem;
+    padding-left: 1rem;
     max-width: 30rem;
 }
 
@@ -369,13 +369,16 @@ form {
     border-width: 3px;   
     font-size: 24px;
 
-    width: 21rem;
+    width: 21.5rem;
 }
 
 .licencetypes {
     padding-top: 5rem;
     font-size: 18px;
-    padding-left: 4rem;
+}
+
+.licencetypes h1, p {
+    padding-left: 1rem;
 }
 
 

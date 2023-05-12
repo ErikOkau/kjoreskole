@@ -22,10 +22,9 @@ async function login() {
     console.log("Successfully logged in as:", user.email)
     // Redirect to logged-in page
     router.push("/")
-    // TODO: Redirect to a logged-in page or update UI to show logged-in state
   } catch (error) {
+    // Show error message to user
     alert("Feil email eller passord", error)
-    // TODO: Show error message to user
   }
 }   
 

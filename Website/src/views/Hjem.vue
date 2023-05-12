@@ -386,7 +386,7 @@ main {
 
 
 .instruktører {
-    padding-top: 5rem;
+    padding-top: 0rem;
     font-size: 16px;
 }
 

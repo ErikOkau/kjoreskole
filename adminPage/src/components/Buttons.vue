@@ -4,8 +4,8 @@
 </script>
 
 <template>
-    <RouterLink to="/">
-    <button class="button"><p>Bestill time nå</p></button>
+    <RouterLink to="/Website">
+    <button class="button"><p>Hjemmeside</p></button>
     </RouterLink>   
 </template>
 

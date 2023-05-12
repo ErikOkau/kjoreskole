@@ -1,13 +1,25 @@
 <script setup>
 const props = defineProps({
     color: String,
-    placeholderColor: String
+    placeholderColor: String,
+    modelValue: String,
 })
+
+
+const emit = defineEmits(['update:modelValue'])
+
+function updateValue (event) {
+    emit('update:modelValue', event.target.value)
+}
 </script>
 
 <template>
 <div class="container">
-    <input v-bind="$attrs">
+    <input 
+        v-bind="$attrs"
+        :value="modelValue"
+        @input="updateValue"
+    >
     <div class="underline"></div>
 </div>
 </template>
@@ -53,7 +65,7 @@ input::placeholder {
 .container {
     display: flex;
     flex-direction: column;
-    width: 21rem;
+    width: 22rem;
     padding-top: 1rem;  
     
 }

@@ -65,7 +65,7 @@ input::placeholder {
 .container {
     display: flex;
     flex-direction: column;
-    width: 21rem;
+    width: 21.5rem;
     padding-top: 1rem;  
     
 }

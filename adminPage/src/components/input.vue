@@ -1,25 +1,30 @@
 <script setup>
+// Define props to be passed to the component
 const props = defineProps({
     color: String,
     placeholderColor: String,
     modelValue: String,
 })
 
-
+// Define the events that can be emitted by the component
 const emit = defineEmits(['update:modelValue'])
 
+// Define a function that updates the model value and emits the update event
 function updateValue (event) {
     emit('update:modelValue', event.target.value)
 }
 </script>
 
 <template>
+<!-- The template for the component -->
 <div class="container">
+    <!-- An input field that is bound to $attrs and the modelValue prop -->
     <input 
         v-bind="$attrs"
         :value="modelValue"
         @input="updateValue"
     >
+    <!-- A div element that serves as an underline for the input field -->
     <div class="underline"></div>
 </div>
 </template>
@@ -65,7 +70,7 @@ input::placeholder {
 .container {
     display: flex;
     flex-direction: column;
-    width: 22rem;
+    width: 21.5rem;
     padding-top: 1rem;  
     
 }

@@ -2,12 +2,13 @@
 
 import Input from '../components/input.vue'
 
-import { collection, setDoc, doc, getDocs } from 'firebase/firestore'
+import { collection, setDoc, doc, getDocs, deleteDoc } from 'firebase/firestore'
 
 import { db, auth } from '../firebase/firebase.js'
-import { ref, onMounted } from "vue"
+import { ref, onMounted, computed } from "vue"
 
 const brukere = ref([])
+const forms = ref([])
 
 onMounted(async () => {
     const querySnapshot = await getDocs(collection(db, "brukere"));
@@ -18,11 +19,14 @@ onMounted(async () => {
         })
     });
 
+    const storedForms = localStorage.getItem('forms');
+    if (storedForms) {
+    forms.value = JSON.parse(storedForms);
+    }
+
     console.log(brukere.value)
 });
 
-
-const formSend = ref(false)
 
 const form = ref({
     Elev: "0",
@@ -36,6 +40,18 @@ const form = ref({
 const formRef = collection(db, 'Kjøretimer')
 
 const message = ref('')
+const formSend = ref(false)
+
+function validateForm() {
+  const { Elev, Type_førerkort, Dato, Tid, Sted, Adresse } = form.value
+  if (!Elev || !Type_førerkort || !Dato || !Tid || !Sted || !Adresse) {
+    message.value = 'Fyll ut alle feltene'
+    return false
+  } else {
+    message.value = ''
+    return true
+  }
+}
 
 
 async function sendForm() {
@@ -51,15 +67,40 @@ async function sendForm() {
             Adresse,
         })
 
-        formSend.value = true
+        // push data to forms array
+        forms.value.push({
+            Elev,
+            Type_førerkort,
+            Dato,
+            Tid,
+            Sted,
+            Adresse,
+        })
+
+        localStorage.setItem('forms', JSON.stringify(forms.value))
 
         message.value = 'Time lagt til!'
+        formSend.value = true
+          setTimeout(() => {
+            formSend.value = false
+          }, 3000)
     } catch (error){
         message.value = 'Noe gikk galt, prøv igjen senere' + error.message
-        formSend.value = true
     }
 }
 
+
+
+const mappedForms = computed(() => {
+    return forms.value.map((form) => {
+        const bruker = brukere.value.find((bruker) => bruker.id === form.Elev)
+        return {
+            ...form,
+            Elev: bruker ? bruker.Fornavn + " " + bruker.Etternavn : null,
+        }
+    })
+})
+    
 
 </script>
 
@@ -90,13 +131,13 @@ async function sendForm() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="forms in form">
-                                <td>{{ forms.Elev }}</td>
-                                <td>{{ forms.Type_førerkort }}</td>
-                                <td>{{ forms.Dato }}</td>
-                                <td>{{ forms.Tid }}</td>
-                                <td>{{ forms.Sted }}</td>
-                                <td>{{ forms.Adresse }}</td>
+                            <tr v-for="form in mappedForms" :key="form.id">
+                                <td>{{ form.Elev }}</td>
+                                <td>{{ form.Type_førerkort }}</td>
+                                <td>{{ form.Dato }}</td>
+                                <td>{{ form.Tid }}</td>
+                                <td>{{ form.Sted }}</td>
+                                <td>{{ form.Adresse }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -159,6 +200,7 @@ async function sendForm() {
 
 .tittel {
     font-size: 2.5rem;
+    color: var(--blue);
 }
 
 .tittel p {
@@ -181,6 +223,47 @@ async function sendForm() {
 .bekreftelse_flex {
     padding-left: 1rem;
 }
+
+
+
+.tabell {
+  margin-top: 20px;
+}
+
+.tabell table {
+  border: 1px solid #ddd;
+  width: 100%;
+  border-collapse: collapse;
+
+}
+
+.tabell table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  padding: 1rem 1rem 1rem;
+  text-align: center;
+}
+
+.tabell table th {
+  background-color: #f2f2f2;
+  padding: 1rem 1rem 1rem;
+  font-weight: bold;
+}
+
+.tabell tbody {
+   padding-left: 1rem;
+}
+
+.tabell table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.tabell thead {
+  position: sticky;
+  top: 0;
+}
+
 
 </style>
 
@@ -262,13 +345,6 @@ form {
     flex-direction: column;
     gap: 4rem;
 }
-.header {
-    font-size: 2.5rem;
-}
-
-.tittel {
-    font-size: 2.5rem;
-}
 
 </style>
 
@@ -318,7 +394,7 @@ form {
 
 
 .select_dropdown {
-    width: 22rem;
+    width: 21.5rem;
 }
 
 .font1 {
@@ -350,6 +426,47 @@ form {
     
 }
 
+
+
+/* Tabell */
+.tabell {
+  margin-top: 1rem;
+}
+
+.tabell table {
+  border: 1px solid #ddd;
+  width: 0%;
+  border-collapse: collapse;
+}
+
+.tabell table td {
+  padding: 0px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  padding: 0.5rem 0.5rem 0.5rem ;
+  text-align: center;
+  font-size: 13.5px;
+}
+
+.tabell table th {
+  background-color: #f2f2f2;
+  padding: 0.5rem 0.5rem 0.5rem;
+  font-size: 10px;
+}
+
+.tabell tbody {
+   padding-left: 0rem;
+}
+
+.tabell table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.tabell thead {
+  position: sticky;
+  top: 0;
+}
+
 }
 
 </style>
@@ -370,12 +487,13 @@ form {
     padding-bottom: 2rem;
 }
 .header {
-    font-size: 24px;
+    font-size: 1.5rem;
 }
 
 .tittel {
-    font-size: 24px;
+    font-size: 1.5rem;
 }
+
 
 .bekreftelse {
     border: 2px solid;

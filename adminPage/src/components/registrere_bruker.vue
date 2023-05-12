@@ -1,51 +1,51 @@
 <script setup>
-import { ref } from 'vue'
-import router  from "../router"
-import { 
-    createUserWithEmailAndPassword, 
-    updateProfile 
-} from 'firebase/auth'
-import { auth } from '../firebase/firebase.js'
 
-const registrationForm = ref({
+import { ref } from 'vue'
+import router  from "../router" // Import Vue Router to redirect to homepage
+import { 
+    createUserWithEmailAndPassword, // Import Firebase Auth method for user registration
+    updateProfile // Import Firebase Auth method for updating user profile
+} from 'firebase/auth' 
+import { auth } from '../firebase/firebase.js' // Import Firebase authentication instance
+
+const registrationForm = ref({ // Declare reactive registration form object
   email: "",
   password: ""
 })
 
-async function registerUser() {
+async function registerUser() { // Define async function to register user
   try {
-    const { email, password, username } = registrationForm.value
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-    const user = userCredential.user
+    const { email, password, username } = registrationForm.value // Get user email and password from registration form
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password) // Create Firebase user credential with email and password
+    const user = userCredential.user // Get the Firebase user object
     console.log("Successfully registered user:", user.email)
     // Update user profile display name
-    await updateProfile(user, { displayName: username })
+    await updateProfile(user, { displayName: username }) // Update user profile display name with username
     console.log("Successfully updated user profile:", user.displayName)
     // Redirect to homepage
-    router.push("/")
+    router.push("/") // Redirect user to homepage after successful registration
   } catch (error) {
     // Show error message to user
-    alert("Failed to register user. " + error.message)
+    alert("Failed to register user. " + error.message) // Show error message to user if registration fails
   }
 }
 
 </script>
-
+<!-- HTML template for user registration form -->
 <template>
 <div class="headline">
     <h1>Velkommen</h1>
     <p>Vennligst skriv inn email og passord for å registrere ny bruker</p>
 </div>
-
 <div class="register">
     <h2>Email</h2>
-    <input v-model="registrationForm.email" type="text" color="black">
+    <input v-model="registrationForm.email" type="text" color="black"> <!-- Bind email input field to reactive registrationForm object -->
     <h2>Passord</h2>
-    <input v-model="registrationForm.password" type="password" color="black">
+    <input v-model="registrationForm.password" type="password" color="black"> <!-- Bind password input field to reactive registrationForm object -->
 
-    <button class="register_button" @click="registerUser()">Registrer bruker</button>
+        <button class="register_button" @click="registerUser()">Registrer bruker</button>
 
-</div>
+    </div>
 </template>
 
 <style scoped>
@@ -144,7 +144,7 @@ img {
 
 @media only screen and (max-width: 400px) { 
 .headline {
-    margin-left: 6rem;
+    margin-left: 4.5rem;
     padding-bottom: 3rem;
     padding-top: 2rem;
     max-width: 250px;
@@ -166,7 +166,7 @@ img {
     flex-direction: column;
     width: 15rem;
     gap: 1rem;
-    margin-left: 6rem;
+    margin-left: 4.5rem;
     padding-bottom: 12.7rem;
 }
 

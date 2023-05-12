@@ -1,17 +1,20 @@
 <script setup>
+// Define props for the component
 const props = defineProps({
     name:String,
-    imgSrc:String,
+    imgSrc:String, 
     id:String,
     modelValue:String,
 })
 
+// Define emits for the component
+// The component emits an 'update:modelValue' event when the input value changes
 const emit = defineEmits(['update:modelValue'])
 
 </script>
-
 <template>
 <div>
+    <!-- Radio input element -->
     <input 
         class="Input" 
         type="radio" 
@@ -20,6 +23,7 @@ const emit = defineEmits(['update:modelValue'])
         :value="modelValue"
         @input="$emit('update:modelValue', id)"
     >
+    <!-- Label element for radio input, with background image and label text as the id prop -->
     <label :for="id" class="radioLabel" :style="{ backgroundImage: `url('${imgSrc}')` }">{{ id }}</label>
 </div>
 </template>

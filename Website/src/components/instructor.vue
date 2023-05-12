@@ -1,5 +1,6 @@
 <script setup>
 
+// Define props for the component
 const props = defineProps({
     name:String,
     imgSrc:String,
@@ -8,12 +9,16 @@ const props = defineProps({
 
 </script>
 
+
 <template>
-<div class="wrapper">
-    <img :src="imgSrc">
-    <p>{{ name }}</p>
-    <p class="opacity_p">{{ type }}</p>
-</div>
+    <div class="wrapper">
+        <!-- Image tag for the image source -->
+        <img :src="imgSrc">
+        <!-- p tag for the name prop -->
+        <p>{{ name }}</p>
+        <!-- p tag for the type prop -->
+        <p class="opacity_p">{{ type }}</p>
+    </div>
 </template>
 
 <style scoped>

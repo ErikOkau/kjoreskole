@@ -1,16 +1,15 @@
 <script setup>
 
+// Importing the necessary components and firebase functionalities
 import Input from '../components/input.vue'
 import LicenceTypes from '../components/licenceTypes.vue';
 import RadioInput from '../components/radioInput.vue';
-
 import { collection, setDoc, doc } from 'firebase/firestore'
-
 import { db, auth } from '../firebase/firebase.js'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { ref } from 'vue'
 
-    // define the licence types
+// Defining the different license types available
 const licenceTypes = [
     {
         name:"Personbil (B)",
@@ -29,10 +28,12 @@ const licenceTypes = [
         imgSrc: "/src/components/Bilder/Tung_motorsykkel_transformed-removebg-preview 2.png"
     },
 ]
-const selectedOption = ref(null)
 
+// Creating a reactive reference for the selected license type and the form submission status
+const selectedOption = ref(null)
 const formSend = ref(false)
 
+// Creating a reactive reference for the form data
 const form = ref({
     Fornavn: "",
     Etternavn: "",
@@ -42,29 +43,32 @@ const form = ref({
     Fullførte_kurs: "",
 })
 
+// Creating a reference to the "brukere" collection in Firestore
 const formRef = collection(db, 'brukere')
 
+// Creating a reactive reference for the message displayed after form submission
 const message = ref('')
 
-
-
-
+// Async function to send the form data to Firestore
 async function sendForm() {
+    // Extracting the necessary form data
     const { Fornavn, Etternavn, Bursdag, Mail, Mobilnumber, Fullførte_kurs } = form.value
 
     let user
-    
+
     try {
+        // Creating a new user in Firebase Authentication
         const userCredential = await createUserWithEmailAndPassword(auth, Mail, Mobilnumber)
         user = userCredential.user
     } catch {
+        // Displaying an error message if the email is invalid
         message.value = "Invalid Email"
         formSend.value = true
         return
     }
 
-
     try {
+        // Saving the form data to Firestore
         await setDoc(doc(formRef, user.uid), {
             Fornavn,
             Etternavn,
@@ -76,60 +80,66 @@ async function sendForm() {
         })
         formSend.value = true
 
+        // Displaying a success message after form submission
         message.value = 'Bestillingen ble sendt inn! Logg inn med epost og tlf som passord for å se bestillingen din'
     } catch (error) {
+      // Displaying an error message if there was a problem saving the form data
       message.value = 'Noe gikk galt, prøv igjen senere' + error.message
       formSend.value = true
     }
 }
 
-
 </script>
 
 <template>
 
-    <form
-    @submit.prevent="sendForm"
-    >
-        <div class="headliner">
-            <h1>Bestill time</h1>
-            <h2>Deltaker informasjon</h2>
-        </div>
+    <!-- calls the sendForm method when submitted -->
+<form @submit.prevent="sendForm">
+    <div class="headliner">
+        <h1>Bestill time</h1>
+        <h2>Deltaker informasjon</h2>
+    </div>
 
-        <div class="forms">
-            <Input placeholder="Fornavn" type='text' color="black" v-model="form.Fornavn"/>
-            <Input placeholder="Etternavn" type='text' color="black" v-model="form.Etternavn"/>
-            <Input type='date' color="black" v-model="form.Bursdag"/>
-            <Input placeholder="Epost" type="email" id="email" color="var(--blue)" placeholder-color="var(--blue)" v-model="form.Mail"/>
-            <Input placeholder="Telefon" type="text" id="phone" name="phone" color="var(--blue)" placeholder-color="var(--blue)" v-model="form.Mobilnumber"/>
-            <select class="select_dropdown" v-model="form.Fullførte_kurs">
-                <option class="font1">Fullførte kurs</option>
-                <option class="font">Trafikalt grunnkurs</option>
-                <option class="font">Mørkekjøring</option>
-                <option class="font">Begge kurs</option>
-            </select>  
-        </div>
+    <div class="forms">
+        <!-- custom Input component: receives placeholder, type, color, and v-model as props -->
+        <Input placeholder="Fornavn" type='text' color="black" v-model="form.Fornavn"/>
+        <Input placeholder="Etternavn" type='text' color="black" v-model="form.Etternavn"/>
+        <Input type='date' color="black" v-model="form.Bursdag"/>
+        <Input placeholder="Epost" type="email" id="email" color="var(--blue)" placeholder-color="var(--blue)" v-model="form.Mail"/>
+        <Input placeholder="Telefon" type="text" id="phone" name="phone" color="var(--blue)" placeholder-color="var(--blue)" v-model="form.Mobilnumber"/>
+        <!-- A select dropdown component that shows course options -->
+        <select class="select_dropdown" v-model="form.Fullførte_kurs">
+            <option class="font1">Fullførte kurs</option>
+            <option class="font">Trafikalt grunnkurs</option>
+            <option class="font">Mørkekjøring</option>
+            <option class="font">Begge kurs</option>
+        </select>  
+    </div>
 
-        <div class="licencetypes">
-            <h1>Type førerkort</h1>
-            <p>Trykk på hvilke kjøretimer du vil ha -- <span>{{ selectedOption }}</span></p>
+    <!-- section that shows license types options as radio buttons -->
+    <div class="licencetypes">
+        <h1>Type førerkort</h1>
+        <p>Trykk på hvilke kjøretimer du vil ha -- <span>{{ selectedOption }}</span></p>
 
-            <div class="wrap-bilder">
-                <RadioInput v-for="item in licenceTypes" name="førerkort" :img-src="item.imgSrc" :id="item.name" v-model="selectedOption"/>
-            </div>
+        <!-- custom RadioInput component that shows license types as images and allows selection -->
+        <div class="wrap-bilder">
+            <RadioInput v-for="item in licenceTypes" name="førerkort" :img-src="item.imgSrc" :id="item.name" v-model="selectedOption"/>
         </div>
-        
-        <div class="button_flex">
-            <button :disabled="formSend" class="submit">Send inn</button>
+    </div>
+    
+    <div class="button_flex">
+        <!-- The button is disabled when the form is being sent -->
+        <button :disabled="formSend" class="submit">Send inn</button>
+    </div>
+    
+    <!-- confirmation section that shows a message after the form has been sent -->
+    <div class="bekreftelse_flex">
+        <div class="bekreftelse" v-if="formSend">
+            <p>{{ message }}</p>
         </div>
-        
-        <div class="bekreftelse_flex">
-            <div class="bekreftelse" v-if="formSend">
-                <p>{{ message }}</p>
-            </div>
-        </div>
-      
-    </form>
+    </div>
+  
+</form>
 
 </template>
 

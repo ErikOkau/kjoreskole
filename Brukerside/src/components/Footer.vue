@@ -5,7 +5,6 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Untitled</title>
-      <link rel="stylesheet" href="assets/css/style.css">
   </head>
   
   <body>
@@ -141,6 +140,8 @@
 .container {
     display: flex;
     background-color: black;  
+    margin-left: 0rem;
+    padding: 0rem 1rem 1rem;
 }
 
 .footer .item.social > a:hover {

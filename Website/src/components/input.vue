@@ -11,6 +11,7 @@ const emit = defineEmits(['update:modelValue'])
 function updateValue (event) {
     emit('update:modelValue', event.target.value)
 }
+
 </script>
 
 <template>

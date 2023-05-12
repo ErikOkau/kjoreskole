@@ -1,4 +1,5 @@
 <script setup>
+// Import necessary functions and modules
 import { ref } from 'vue';
 import router  from "../router"
 import { 
@@ -8,26 +9,28 @@ import {
 } from 'firebase/auth'
 import { auth } from '../firebase/firebase.js'
 
+// Define a reactive reference object for the login form data
 const loginForm = ref({
     password: "",
     email: ""
 })
 
-
+// Define the login function
 async function login() {
   try {
+    // Destructure email and password from the loginForm reactive object
     const { email, password } = loginForm.value
+    // Attempt to sign in with the given email and password
     const userCredential = await signInWithEmailAndPassword(auth, email, password)
     const user = userCredential.user
     console.log("Successfully logged in as:", user.email)
-    // Redirect to logged-in page
+    // Redirect to the home page after successful login
     router.push("/")
   } catch (error) {
     // Show error message to user
     alert("Feil email eller passord", error)
   }
 }   
-
 
 </script>
 
@@ -37,11 +40,12 @@ async function login() {
     <h1>Velkommen</h1>
     <p>Vennligst skriv inn brukernavn og passord</p>
 </div>
-
 <div class="login">
     <h2>E-postadresse</h2>
+    <!-- Bind the email input to the loginForm reactive object -->
     <input v-model="loginForm.email" type="email" color="black">
     <h2>Passord</h2>
+    <!-- Bind the password input to the loginForm reactive object -->
     <input v-model="loginForm.password" type="password" color="black">
 
     <button class="login_button" @click="login">Logg inn</button>

@@ -50,9 +50,6 @@ async function login() {
 
     <button class="login_button" @click="login">Logg inn</button>
 
-    <div class="Registrere_bruker">
-        <RouterLink to="/signup">Ikke bruker? Registrer nå</RouterLink>
-    </div>
 </div>
 </template>
 
@@ -126,18 +123,6 @@ img {
     max-height: 25px;
     justify-content: center;
     align-items: center;
-}
-
-.Registrere_bruker {
-    align-self: center;
-}
-
-.Registrere_bruker a {
-    font-style: none;
-    list-style: none;
-    text-decoration: none;
-    color: var(--blue);
-    font-weight: bold;
 }
 
 </style>

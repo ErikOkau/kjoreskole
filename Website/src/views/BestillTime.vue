@@ -4,7 +4,10 @@
 import Input from '../components/input.vue'
 import LicenceTypes from '../components/licenceTypes.vue';
 import RadioInput from '../components/radioInput.vue';
-import { collection, setDoc, doc } from 'firebase/firestore'
+import { collection, 
+        setDoc, 
+        doc 
+} from 'firebase/firestore'
 import { db, auth } from '../firebase/firebase.js'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { ref } from 'vue'
@@ -82,12 +85,24 @@ async function sendForm() {
 
         // Displaying a success message after form submission
         message.value = 'Bestillingen ble sendt inn! Logg inn med epost og tlf som passord for å se bestillingen din'
+
+        // Resets the form input values
+        form.value = {
+            Fornavn: "",
+            Etternavn: "",
+            Bursdag: "",
+            Mail: "",
+            Mobilnumber: "",
+            Fullførte_kurs: "",
+        }
+
     } catch (error) {
       // Displaying an error message if there was a problem saving the form data
       message.value = 'Noe gikk galt, prøv igjen senere' + error.message
       formSend.value = true
     }
 }
+
 
 </script>
 

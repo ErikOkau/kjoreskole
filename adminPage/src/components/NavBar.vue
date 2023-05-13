@@ -76,6 +76,7 @@ loggedIn.value = false
 .login a:hover {
     opacity: 0.7;
     transition: 0.2s ease-in-out;
+    cursor: pointer;
 }
 
 

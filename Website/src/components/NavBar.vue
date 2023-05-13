@@ -14,7 +14,7 @@ import Buttons from '../components/Buttons.vue'
                 </div>
         
                 <div class="login">
-                    <a href="/bruker">Logg inn</a>
+                    <a href="/login">Logg inn</a>
                 </div>
                 
             <Buttons class="bestill" />

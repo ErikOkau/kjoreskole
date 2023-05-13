@@ -1,17 +1,18 @@
 <script setup>
 
 import Input from '../components/input.vue'
-
 import { collection, setDoc, doc, getDocs, deleteDoc } from 'firebase/firestore'
-
 import { db, auth } from '../firebase/firebase.js'
 import { ref, onMounted, computed } from "vue"
 
+
 const brukere = ref([])
 const forms = ref([])
+const bestillinger = ref([])
+const kjøretimer = ref([])
 
 onMounted(async () => {
-    const querySnapshot = await getDocs(collection(db, "brukere"));
+    const querySnapshot = await getDocs(collection(db, "brukere"))
     querySnapshot.forEach((doc) => {
         brukere.value.push({
             id: doc.id,
@@ -19,18 +20,41 @@ onMounted(async () => {
         })
     });
 
-    const storedForms = localStorage.getItem('forms');
-    if (storedForms) {
-    forms.value = JSON.parse(storedForms);
-    }
-
     console.log(brukere.value)
 });
 
+onMounted(async () => {
+  const bestillingerSnapshot = await getDocs(collection(db, 'brukere'))
+  bestillingerSnapshot.forEach((doc) => {
+    bestillinger.value.push({
+      id: doc.id,
+      ...doc.data(),
+    })
+  })
+
+  console.log(bestillinger.value)
+})
+
+onMounted(async () => {
+  const kjøretimerSnapshot = await getDocs(collection(db, 'Kjøretimer'))
+  kjøretimerSnapshot.forEach((doc) => {
+    kjøretimer.value.push({
+      id: doc.id,
+      ...doc.data(),
+    })
+  })
+
+  console.log(kjøretimer.value)
+  
+})
+
+ 
+
+
 
 const form = ref({
-    Elev: "0",
-    Type_førerkort: "0",
+    Elev: "",
+    Type_førerkort: "",
     Dato: "",
     Tid: "",
     Sted: "",
@@ -66,8 +90,6 @@ async function sendForm() {
             Adresse,
         })
 
-        localStorage.setItem('forms', JSON.stringify(forms.value))
-
         message.value = 'Time lagt til!'
         formSend.value = true
           setTimeout(() => {
@@ -78,26 +100,39 @@ async function sendForm() {
     }
 }
 
-async function deleteForm(formIndex) {
-    try {
-        await deleteDoc(doc(formRef, forms.value[formIndex].id))
-        forms.value.splice(formIndex, 1)
-        localStorage.setItem('forms', JSON.stringify(forms.value))
-    } catch (error) {
-        console.log(error)
+
+const mappedBestillinger = computed(() => {
+  return bestillinger.value.map((bestilling) => {
+    return {
+      ...bestilling,
     }
+  })
+})
+
+const mappedClasses = computed(() => {
+  return kjøretimer.value.map((kjøretimer) => {
+    return {
+      ...kjøretimer,
+    }
+  })
+})
+
+const deleteForm = async (form) => {
+  try {
+    // delete the form from the database
+    await deleteDoc(doc(db, 'Kjøretimer', form.id))
+
+    // remove the form from the kjøretimer array
+    const index = kjøretimer.value.findIndex((item) => item.id === form.id)
+    if (index !== -1) {
+      kjøretimer.value.splice(index, 1)
+    }
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 
-const mappedForms = computed(() => {
-    return forms.value.map((form) => {
-        const bruker = brukere.value.find((bruker) => bruker.id === form.Elev)
-        return {
-            ...form,
-            Elev: bruker ? bruker.Fornavn + " " + bruker.Etternavn : null,
-        }
-    })
-})
 
     
 
@@ -130,7 +165,7 @@ const mappedForms = computed(() => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="form in mappedForms" :key="form.id">
+                            <tr v-for="form in mappedClasses" :key="form.id">
                                 <td>{{ form.Elev }}</td>
                                 <td>{{ form.Type_førerkort }}</td>
                                 <td>{{ form.Dato }}</td>
@@ -138,11 +173,41 @@ const mappedForms = computed(() => {
                                 <td>{{ form.Sted }}</td>
                                 <td>{{ form.Adresse }}</td>
                                 <td>
-                                    <button class="delete" @click="deleteForm(formIndex)">Fullført</button>
+                                    <button class="delete" @click="deleteForm(form)">Fullført</button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <div class="bestillinger">
+                    <div class="tittel">
+                        <h2>Bestillinger</h2>
+                    </div>
+                    <div class="tabell">
+                        <table>
+                            <thead>
+                            |   <tr>
+                                    <th>Fornavn</th>
+                                    <th>Fornavn</th>
+                                    <th>Bursdag</th>
+                                    <th>Mail</th>
+                                    <th>Mobilnumber</th>
+                                    <th>Fullførte_kurs</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="bestilling in mappedBestillinger" :key="bestilling.id">
+                                    <td>{{ bestilling.Fornavn }}</td>
+                                    <td>{{ bestilling.Fornavn }}</td>
+                                    <td>{{ bestilling.Bursdag }}</td>
+                                    <td>{{ bestilling.Mail }}</td>
+                                    <td>{{ bestilling.Mobilnumber }}</td>
+                                    <td>{{ bestilling.Fullførte_kurs }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         
@@ -203,12 +268,9 @@ const mappedForms = computed(() => {
 .tittel {
     font-size: 2.5rem;
     color: var(--blue);
-}
-
-.tittel p {
-    font-size: 2rem;
     padding-top: 1rem;
 }
+
 
 .bekreftelse {
     border: 2px solid;
@@ -325,7 +387,6 @@ form {
     border-top: none;
     border-left: none;
     border-right: none;
-    border-color: black;
     color: black;
     border-width: 3px;   
     font-size: 36px;
@@ -379,6 +440,10 @@ form {
     transition: 0.2s ease-in-out;
 }
 
+.submit_flex {
+    padding-left: 0.7rem;
+}
+
 
 .submit:hover {
     opacity: 70%;
@@ -391,6 +456,7 @@ form {
     display: flex;
     flex-wrap: wrap;
     gap: 3rem;
+    padding-left: 0.75rem;
 }
 
 
@@ -447,7 +513,7 @@ form {
   border-bottom: 1px solid #ddd;
   padding: 0.5rem 0.5rem 0.5rem ;
   text-align: center;
-  font-size: 13.5px;
+  font-size: 10px;
 }
 
 .tabell table th {
@@ -484,7 +550,7 @@ form {
     display: flex;
     flex-direction: column;
     gap: 3rem;
-    padding-left: 1rem;
+    padding-left: 0.75rem;
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
@@ -510,7 +576,8 @@ form {
 }
 
 .bekreftelse_flex {
-    padding-left: 1rem;
+    padding-left: 0rem;
+    padding-right: 0.75rem;
 }
 
 }

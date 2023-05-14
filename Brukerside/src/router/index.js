@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import brukerside from '../views/brukerside.vue'
 import login from '../components/login.vue'
 import bestill from '/Github/kjoreskole/Website/src/views/BestillTime.vue'
+import Website from '/Github/kjoreskole/Website/src/views/Hjem.vue'
 
 
 const router = createRouter({
@@ -21,6 +22,11 @@ const router = createRouter({
       path: '/bestill',
       name: 'bestill',
       component: bestill
+    },
+    {
+      path: '/Website',
+      name: 'Website',
+      component: Website
     }
 
   ]

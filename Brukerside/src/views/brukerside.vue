@@ -50,12 +50,17 @@
         })
     })
 
+    // check if the user is authenticated
+    const isAuthenticated = computed(() => {
+    return !!auth.currentUser
+    })
+
 
 </script>
 
 <template>
 
-    <div class="flex">
+    <div v-if="isAuthenticated" class="flex">
         <div class="headline">
             <h1>Dine timer</h1>
             <h3>Nedenfor kan du se dine fremtidige timer</h3>
@@ -189,7 +194,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-left: 4rem;
+    margin-left: 1rem;
     padding-top: 2rem;
 }
 
@@ -198,34 +203,36 @@
 
 
 
-
+/* Tabell */
 .tabell {
-  margin-top: 20px;
+  margin-top: 1rem;
+  padding-bottom: 19.2rem;
+  padding-right: 1rem;
 }
 
 .tabell table {
   border: 1px solid #ddd;
   width: 100%;
   border-collapse: collapse;
-
 }
 
 .tabell table td {
-  padding: 10px;
+  padding: 0px;
   text-align: left;
   border-bottom: 1px solid #ddd;
-  padding: 1rem 1rem 1rem;
+  padding: 0.5rem 0.5rem 0.5rem ;
   text-align: center;
+  font-size: 10px;
 }
 
 .tabell table th {
   background-color: #f2f2f2;
-  padding: 1rem 1rem 1rem;
-
+  padding: 0.5rem 0.5rem 0.5rem;
+  font-size: 10px;
 }
 
 .tabell tbody {
-   padding-left: 1rem;
+   padding-left: 0rem;
 }
 
 .tabell table tr:hover {

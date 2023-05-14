@@ -43,7 +43,7 @@ const form = ref({
     Bursdag: "",
     Mail: "",
     Mobilnumber: "",
-    Fullførte_kurs: "",
+    Fullførte_kurs: "0",
 })
 
 // Creating a reference to the "brukere" collection in Firestore
@@ -123,11 +123,11 @@ async function sendForm() {
         <Input placeholder="Epost" type="email" id="email" color="var(--blue)" placeholder-color="var(--blue)" v-model="form.Mail"/>
         <Input placeholder="Telefon" type="text" id="phone" name="phone" color="var(--blue)" placeholder-color="var(--blue)" v-model="form.Mobilnumber"/>
         <!-- A select dropdown component that shows course options -->
-        <select class="select_dropdown" v-model="form.Fullførte_kurs">
-            <option class="font1">Fullførte kurs</option>
-            <option class="font">Trafikalt grunnkurs</option>
-            <option class="font">Mørkekjøring</option>
-            <option class="font">Begge kurs</option>
+        <select class="select_dropdown" v-model="form.Fullførte_kurs" >
+            <option class="font1" value="0">Fullførte kurs</option>
+            <option class="font" value="Trafikalt grunnkurs">Trafikalt grunnkurs</option>
+            <option class="font" value="Mørkekjøring">Mørkekjøring</option>
+            <option class="font" value="Begge kurs">Begge kurs</option>
         </select>  
     </div>
 

@@ -138,7 +138,7 @@ const mappedClasses = computed(() => {
 
 
 // function for deleting the form from the database
-const deleteForm = async (form) => {
+const deleteForm = (form) => {
   try {
     // delete the form from the database
     deleteDoc(doc(db, 'Kjøretimer', form.id))
@@ -692,6 +692,7 @@ form {
     border: 2px solid;
     text-align: center;
     padding: 0rem;
+    margin-left: 1rem;
     
     user-select: none;
 }

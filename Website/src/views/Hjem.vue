@@ -5,8 +5,8 @@ import Instructor from '../components/instructor.vue'
 
 const instructor = [
     {
-        name:"Erik Sørheim",
-        imgSrc: "/src/components/Bilder/Erik_instruktør.jpg",
+        name:"Karl McBacon",
+        imgSrc: "/src/components/Bilder/ezgif_com-gif-maker-q206eXFwC-transformed-transformed.jpeg",
         type: "Personbil (B)"
     },
     {
@@ -15,12 +15,12 @@ const instructor = [
         type: "Lettsykkel (A1)"
     },
     {
-        name:"Erik Johnsen",
-        imgSrc: "/src/components/Bilder/Erik_instruktør.jpg",
+        name:"Kari Underhaug",
+        imgSrc: "/src/components/Bilder/I2_-_Edna.png",
         type: "Motorsykkel (A2)"
     },
     {
-        name:"Erik M. Sørheim",
+        name:"Erik Sørheim",
         imgSrc: "/src/components/Bilder/Erik_instruktør.jpg",
         type: "Tung (A)"
     }

@@ -5,7 +5,9 @@ import Input from '../components/input.vue'
 import { collection, setDoc, doc, getDocs, deleteDoc } from 'firebase/firestore'
 import { db, auth } from '../firebase/firebase.js'
 import { ref, onMounted, computed } from "vue"
-
+import { onAuthStateChanged } from "firebase/auth" // Importing firebase authentication state change function
+import { useRouter } from "vue-router" // Importing vue router function
+const router = useRouter() // Creating a reference to the router function
 
 
 // Creating references to our data that we fetch from firebase
@@ -71,16 +73,16 @@ async function sendForm() {
 
 // Fetching all users from firebase and pushing it to brukere array
 onMounted(async () => {
-    const querySnapshot = await getDocs(collection(db, "brukere"))
-    querySnapshot.forEach((doc) => {
+    const brukereSnapshot = await getDocs(collection(db, "brukere"))
+    brukereSnapshot.forEach((doc) => {
         brukere.value.push({
             id: doc.id,
             ...doc.data()
         })
-    });
+    })
 
     console.log(brukere.value)
-});
+})
 
 
 
@@ -115,7 +117,7 @@ onMounted(async () => {
 
  
 
-// Creating a computed property that maps the bestillinger array and returns it
+// Creating a computed property that maps the bestillinger array and returns it, computed makes it restart when the array is updated
 const mappedBestillinger = computed(() => {
   return bestillinger.value.map((bestilling) => {
     return {
@@ -155,17 +157,21 @@ const deleteForm = (form) => {
   console.log(form)
 }
 
-// check if the user is authenticated
-const isAuthenticated = computed(() => {
-  return !!auth.currentUser
-})
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log("User is signed in")
 
+    } else {
+        console.log("No user is signed in")
+        router.push("/login")
+    }
+})
 
 </script>
 
 <template>
 
-    <div v-if="isAuthenticated" class="loggedin">
+    <div class="loggedin">
         <form 
         @submit.prevent="sendForm"
         >
@@ -213,7 +219,7 @@ const isAuthenticated = computed(() => {
                         <div class="tabell1">
                             <table>
                                 <thead>
-                                |   <tr>
+                                   <tr>
                                         <th>Fornavn</th>
                                         <th>Fornavn</th>
                                         <th>Bursdag</th>
@@ -477,12 +483,18 @@ form {
     background-color: #2C008B;
     color: white;
     border-radius: 10;
-    font-size: 8px;
-    padding: 0.3rem 0.7rem;
+    font-size: 16px;
+    padding: 0.5rem 1.2rem;
     align-self: flex-start;
     font-weight: bold;
     border-radius: 10;
     transition: 0.2s ease-in-out;
+}
+
+.delete:hover {
+    opacity: 70%;
+    cursor: pointer;
+    border-color: pink;
 }
 
 </style>
@@ -591,13 +603,13 @@ form {
   border-bottom: 1px solid #ddd;
   padding: 0.5rem 0.5rem 0.5rem ;
   text-align: center;
-  font-size: 10px;
+  font-size: 8px;
 }
 
 .tabell table th {
   background-color: #f2f2f2;
   padding: 0.5rem 0.5rem 0.5rem;
-  font-size: 10px;
+  font-size: 8px;
 }
 
 .tabell tbody {
@@ -632,7 +644,7 @@ form {
   border-bottom: 1px solid #ddd;
   padding: 0.5rem 0.5rem 0.5rem ;
   text-align: center;
-  font-size: 9.1px;
+  font-size: 9.2px;
 }
 
 .tabell1 table th {
@@ -700,6 +712,18 @@ form {
 .bekreftelse_flex {
     padding-left: 0rem;
     padding-right: 0.75rem;
+}
+
+.delete {
+    background-color: #2C008B;
+    color: white;
+    border-radius: 10;
+    font-size: 8px;
+    padding: 0.3rem 0.7rem;
+    align-self: flex-start;
+    font-weight: bold;
+    border-radius: 10;
+    transition: 0.2s ease-in-out;
 }
 
 }

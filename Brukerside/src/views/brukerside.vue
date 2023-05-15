@@ -1,66 +1,48 @@
 <script setup>
     import Input from '../components/input.vue'
-    import { collection, setDoc, doc, getDocs } from 'firebase/firestore' // Importing firestore functions from firebase library
+    import { collection, setDoc, doc, getDoc, query, where, onSnapshot } from 'firebase/firestore' // Importing firestore functions from firebase library
     import { db, auth } from '../firebase/firebase.js' // Importing firebase database and authentication objects
     import { ref, onMounted, computed } from "vue" // Importing vue reactive objects
+    import { onAuthStateChanged } from "firebase/auth" // Importing firebase authentication state change function
 
     const brukere = ref([]) // Creating a reactive reference for the 'brukere' array
     const forms = ref([]) // Creating a reactive reference for the 'forms' array
 
-    onMounted(async () => { // On component mount, fetch data from Firestore
-        const querySnapshot = await getDocs(collection(db, "Kjøretimer")) // Querying the 'Kjøretimer' collection from Firestore
-        querySnapshot.forEach((doc) => { // Looping through each document in the collection and adding it to the 'forms' array
-            forms.value.push({
-                id: doc.id,
-                ...doc.data()
-            })
-        });
+    function getData(id) { // On component mount, fetch data from Firestore
+        const queryKjøretimer = query(collection(db, "Kjøretimer"), where("elevId", "==", id)) // Querying the 'Kjøretimer' collection from Firestore
+        
+        onSnapshot(queryKjøretimer, (querySnapshot)=>{
+            forms.value = []
 
-        const brukerSnapshot = await getDocs(collection(db, "brukere")); // Querying the 'brukere' collection from Firestore
-        brukerSnapshot.forEach((doc) => { // Looping through each document in the collection and adding it to the 'brukere' array
-            brukere.value.push({
-                id: doc.id,
-                ...doc.data()
+            querySnapshot.forEach((doc) => { // Looping through each document in the collection and adding it to the 'forms' array
+                forms.value.push({
+                    id: doc.id,
+                    ...doc.data()
+                })
             })
-        });
-
+        })
         
 
         console.log(forms.value) // Logging the 'forms' array to the console
-    });
-
-    const form = ref({ // Creating a reactive reference for the 'form' object
-        Elev: "0",
-        Type_førerkort: "0",
-        Dato: "",
-        Tid: "",
-        Sted: "",
-        Adresse: "",
-    })
+    }
 
 
-    const mappedForms = computed(() => { // Creating a computed property for the 'mappedForms' array
-        return forms.value.map((form) => { // Mapping the 'forms' array to add the 'Elev' name from the 'brukere' array
-            const bruker = brukere.value.find((bruker) => bruker.id === form.Elev)
-            return {
-                ...form,
-                id: form.id,
-                Elev: bruker ? bruker.Fornavn + " " + bruker.Etternavn : null,
-            }
-        })
-    })
+    onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log("User is signed in")
 
-    // check if the user is authenticated
-    const isAuthenticated = computed(() => {
-    return !!auth.currentUser
-    })
+        getData(user.uid)
+    } else {
+        console.log("No user is signed in")
+    }
+})
 
 
 </script>
 
 <template>
 
-    <div v-if="isAuthenticated" class="flex">
+    <div class="flex">
         <div class="headline">
             <h1>Dine timer</h1>
             <h3>Nedenfor kan du se dine fremtidige timer</h3>
@@ -81,7 +63,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="form in mappedForms" :key="form.id">
+                        <tr v-for="form in forms" :key="form.id">
                             <td>{{ form.Type_førerkort }}</td>
                             <td>{{ form.Dato }}</td>
                             <td>{{ form.Tid }}</td>
@@ -119,9 +101,10 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding-bottom: 7.9rem;
 }
 
-.fremtidige_timer, .fullførte_timer{
+.fremtidige_timer {
     font-size: 24px;
 }
 
@@ -165,8 +148,6 @@
   top: 0;
 }
 
-
-
 </style>
 
 
@@ -177,6 +158,12 @@
 @media only screen and (max-width: 400px) {
 .headline {
     font-weight: bold;
+    padding-left: 1rem;
+}
+
+.fremtidige_timer h2{
+    font-size: 24px;
+    padding-left: 1rem;
 }
 
 .headline h1 {
@@ -194,7 +181,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-left: 1rem;
+    margin-left: 0rem;
     padding-top: 2rem;
 }
 
@@ -207,7 +194,6 @@
 .tabell {
   margin-top: 1rem;
   padding-bottom: 19.2rem;
-  padding-right: 1rem;
 }
 
 .tabell table {
@@ -222,13 +208,13 @@
   border-bottom: 1px solid #ddd;
   padding: 0.5rem 0.5rem 0.5rem ;
   text-align: center;
-  font-size: 10px;
+  font-size: 9px;
 }
 
 .tabell table th {
   background-color: #f2f2f2;
   padding: 0.5rem 0.5rem 0.5rem;
-  font-size: 10px;
+  font-size: 9px;
 }
 
 .tabell tbody {

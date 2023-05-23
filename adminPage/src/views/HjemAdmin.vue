@@ -2,7 +2,7 @@
 
 // Importing necessary components and libraries
 import Input from '../components/input.vue'
-import { collection, setDoc, doc, getDocs, deleteDoc } from 'firebase/firestore'
+import { collection, setDoc, doc, getDocs, deleteDoc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db, auth } from '../firebase/firebase.js'
 import { ref, onMounted, computed } from "vue"
 import { onAuthStateChanged } from "firebase/auth" // Importing firebase authentication state change function
@@ -24,6 +24,7 @@ const form = ref({
     Tid: "",
     Sted: "",
     Adresse: "",
+    Status: "Ongoing" // Add a default status for new lessons
 })
 
 // Creating a reference to the Kjøretimer collection in firebase
@@ -33,11 +34,13 @@ const message = ref('')
 // Creating a reference to a form submission status
 const formSend = ref(false) 
 
+const ongoingCourses = ref([]) // Creating a reference to an array of ongoing courses
+
 
 
 // Creating an async function to send the form to firebase
 async function sendForm() {
-    const { Elev, Type_førerkort, Dato, Tid, Sted, Adresse } = form.value
+    const { Elev, Type_førerkort, Dato, Tid, Sted, Adresse, Status } = form.value
 
     try {
         await setDoc(doc(formRef), {
@@ -47,10 +50,11 @@ async function sendForm() {
             Tid,
             Sted,
             Adresse,
+            Status // Include the status in the document
         })
 
         // push data to forms array
-        forms.value.push({
+        forms.value.push({  
             Elev,
             Type_førerkort,
             Dato,
@@ -70,7 +74,6 @@ async function sendForm() {
 }
 
 
-
 // Fetching all users from firebase and pushing it to brukere array
 onMounted(async () => {
     const brukereSnapshot = await getDocs(collection(db, "brukere"))
@@ -83,8 +86,6 @@ onMounted(async () => {
 
     console.log(brukere.value)
 })
-
-
 
 // Fetching all Kjøretimer from firebase and pushing it to kjøretimer array
 onMounted(async () => {
@@ -99,23 +100,35 @@ onMounted(async () => {
   console.log(bestillinger.value)
 })
 
-
-
 // Fetching all Kjøretimer from firebase and pushing it to kjøretimer array
-onMounted(async () => {
-  const kjøretimerSnapshot = await getDocs(collection(db, 'Kjøretimer'))
-  kjøretimerSnapshot.forEach((doc) => {
-    kjøretimer.value.push({
-      id: doc.id,
-      ...doc.data(),
+onMounted(() => {
+  onSnapshot(formRef, (courses) => {
+    kjøretimer.value = [] // Empty the kjøretimer array
+    courses.forEach((doc) => {
+      kjøretimer.value.push({
+        id: doc.id,
+        ...doc.data(),
+      })
     })
+    
+
+      sortOngoingCourses() // Call the sortOngoingCourses function
+
   })
 
-  console.log(kjøretimer.value)
-  
 })
 
- 
+function sortOngoingCourses() {
+  let courses = [] // Create an empty array
+
+  kjøretimer.value.forEach((kjøretimer) => {
+    if (kjøretimer.Status == 'Ongoing') {
+      courses.push(kjøretimer) // Push the ongoing courses to the array
+    }
+  })
+
+  ongoingCourses.value = courses // Set the ongoingCourses array to the courses array
+}
 
 // Creating a computed property that maps the bestillinger array and returns it, computed makes it restart when the array is updated
 const mappedBestillinger = computed(() => {
@@ -127,23 +140,11 @@ const mappedBestillinger = computed(() => {
 })
 
 
-
-// Creating a computed property that maps the kjøretimer array and returns it
-const mappedClasses = computed(() => {
-  return kjøretimer.value.map((kjøretimer) => {
-    return {
-      ...kjøretimer,
-    }
-  })
-})
-
-
-
 // function for deleting the form from the database
 const deleteForm = (form) => {
   try {
     // delete the form from the database
-    deleteDoc(doc(db, 'Kjøretimer', form.id))
+    deleteDoc(doc(formRef, form.id))
 
     // remove the form from the kjøretimer array
     const index = kjøretimer.value.findIndex((item) => item.id === form.id)
@@ -156,6 +157,29 @@ const deleteForm = (form) => {
 
   console.log(form)
 }
+
+
+
+// Add this method to your script section
+const markCompleted = async (id) => {
+  try {
+    // Update the status of the form to "Completed" in the database
+    await updateDoc(doc(formRef, id), {
+      Status: 'Completed'
+    })
+
+    // Find the form in the kjøretimer array and update its status
+    const index = kjøretimer.value.findIndex((item) => item.id === id)
+    if (index !== -1) {
+      kjøretimer.value[index].Status = 'Completed'
+    }
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+
+
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -197,7 +221,7 @@ onAuthStateChanged(auth, (user) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="form in mappedClasses" :key="form.id">
+                                <tr v-for="form in ongoingCourses">
                                     <td>{{ form.Elev }}</td>
                                     <td>{{ form.Type_førerkort }}</td>
                                     <td>{{ form.Dato }}</td>
@@ -205,7 +229,7 @@ onAuthStateChanged(auth, (user) => {
                                     <td>{{ form.Sted }}</td>
                                     <td>{{ form.Adresse }}</td>
                                     <td>
-                                        <button class="delete" @click="deleteForm(form)">Fullført</button>
+                                        <button class="delete" @click="markCompleted(form.id)">Fullført</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -221,7 +245,7 @@ onAuthStateChanged(auth, (user) => {
                                 <thead>
                                    <tr>
                                         <th>Fornavn</th>
-                                        <th>Fornavn</th>
+                                        <th>Etternavn</th>
                                         <th>Bursdag</th>
                                         <th>Mail</th>
                                         <th>Mobilnumber</th>
@@ -231,7 +255,7 @@ onAuthStateChanged(auth, (user) => {
                                 <tbody>
                                     <tr v-for="bestilling in mappedBestillinger" :key="bestilling.id">
                                         <td>{{ bestilling.Fornavn }}</td>
-                                        <td>{{ bestilling.Fornavn }}</td>
+                                        <td>{{ bestilling.Etternavn }}</td>
                                         <td>{{ bestilling.Bursdag }}</td>
                                         <td>{{ bestilling.Mail }}</td>
                                         <td>{{ bestilling.Mobilnumber }}</td>

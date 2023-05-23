@@ -14,7 +14,7 @@ const emit = defineEmits(['update:modelValue'])
 </script>
 <template>
 <div>
-    <!-- Radio input element -->
+    <!-- Radio input element,  emit is used to trigger an event --> 
     <input 
         class="Input" 
         type="radio" 
@@ -43,7 +43,8 @@ const emit = defineEmits(['update:modelValue'])
 
 .radioLabel:hover {
     cursor: pointer;
-    opacity: 0.5;
+    opacity: 0.6;
+    transition: ease-in-out 0.4s;
 }
 
 .Input {

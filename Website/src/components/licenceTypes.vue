@@ -4,7 +4,6 @@
 const props = defineProps({
     name:String,
     imgSrc:String
-
 })
 
 </script>

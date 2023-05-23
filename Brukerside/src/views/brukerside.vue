@@ -1,12 +1,14 @@
 <script setup>
-    import Input from '../components/input.vue'
     import { collection, setDoc, doc, getDoc, query, where, onSnapshot } from 'firebase/firestore' // Importing firestore functions from firebase library
     import { db, auth } from '../firebase/firebase.js' // Importing firebase database and authentication objects
     import { ref, onMounted, computed } from "vue" // Importing vue reactive objects
-    import { onAuthStateChanged } from "firebase/auth" // Importing firebase authentication state change function
+    import { onAuthStateChanged } from "firebase/auth" // Importing firebase authentication state change functionnpm ru
+    import { Bar } from 'vue-chartjs'
 
-    const brukere = ref([]) // Creating a reactive reference for the 'brukere' array
+
     const forms = ref([]) // Creating a reactive reference for the 'forms' array
+    const formRef = collection(db, "Kjøretimer") // Creating a reference to the 'Kjøretimer' collection in Firestore
+    const completedFormsCount = ref(0) // Creating a reactive reference for the 'completedFormsCount' variable
 
     function getData(id) { // On component mount, fetch data from Firestore
         const queryKjøretimer = query(collection(db, "Kjøretimer"), where("elevId", "==", id)) // Querying the 'Kjøretimer' collection from Firestore
@@ -36,7 +38,6 @@
         console.log("No user is signed in")
     }
 })
-
 
 </script>
 
@@ -74,7 +75,9 @@
                 </table>
             </div>
         </div>
-    
+        <div class="chart-container">
+            <bar-chart :chart-data="chartData" :options="chartOptions"></bar-chart>
+        </div>  
     </div>
 
 </template>
@@ -232,3 +235,5 @@
 
 }
 </style>
+
+

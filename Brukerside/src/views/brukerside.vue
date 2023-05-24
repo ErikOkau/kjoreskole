@@ -4,14 +4,13 @@
     import { ref, onMounted, computed } from "vue" // Importing vue reactive objects
     import { onAuthStateChanged } from "firebase/auth" // Importing firebase authentication state change functionnpm ru
     import { Bar } from 'vue-chartjs'
+    import Chart from '../components/chart.vue'
 
 
     const forms = ref([]) // Creating a reactive reference for the 'forms' array
-    const formRef = collection(db, "Kjøretimer") // Creating a reference to the 'Kjøretimer' collection in Firestore
-    const completedFormsCount = ref(0) // Creating a reactive reference for the 'completedFormsCount' variable
 
-    function getData(id) { // On component mount, fetch data from Firestore
-        const queryKjøretimer = query(collection(db, "Kjøretimer"), where("elevId", "==", id)) // Querying the 'Kjøretimer' collection from Firestore
+    function getData(uid) { // On component mount, fetch data from Firestore
+        const queryKjøretimer = query(collection(db, "Kjøretimer"), where("elevId", "==", uid)) // Querying the 'Kjøretimer' collection from Firestore
         
         onSnapshot(queryKjøretimer, (querySnapshot)=>{
             forms.value = []
@@ -39,14 +38,18 @@
     }
 })
 
+
+
 </script>
+
+
 
 <template>
 
     <div class="flex">
         <div class="headline">
             <h1>Dine timer</h1>
-            <h3>Nedenfor kan du se dine fremtidige timer</h3>
+            <h3>Nedenfor kan du se dine fremtidige timer, og etter det ser du et diagram over fremtidige og fullførte timer.</h3>
         </div>
 
         <div class="fremtidige_timer">
@@ -75,11 +78,10 @@
                 </table>
             </div>
         </div>
-        <div class="chart-container">
-            <bar-chart :chart-data="chartData" :options="chartOptions"></bar-chart>
-        </div>  
+        <Chart />
     </div>
 
+    
 </template>
 
 <style scoped>
@@ -104,11 +106,12 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding-bottom: 7.9rem;
+    padding-bottom: 1rem;
 }
 
 .fremtidige_timer {
     font-size: 24px;
+    padding-bottom: 10rem;
 }
 
 

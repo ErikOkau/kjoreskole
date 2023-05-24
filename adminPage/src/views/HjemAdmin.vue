@@ -43,7 +43,7 @@ async function sendForm() {
     const { Elev, Type_førerkort, Dato, Tid, Sted, Adresse, Status } = form.value
 
     try {
-        await setDoc(doc(formRef), {
+         setDoc(doc(formRef), {
             elevId: Elev,
             Type_førerkort,
             Dato,
@@ -164,9 +164,10 @@ const deleteForm = (form) => {
 const markCompleted = async (id) => {
   try {
     // Update the status of the form to "Completed" in the database
+    console.log(id)
     await updateDoc(doc(formRef, id), {
       Status: 'Completed'
-    })
+    }, { merge: true })
 
     // Find the form in the kjøretimer array and update its status
     const index = kjøretimer.value.findIndex((item) => item.id === id)
@@ -177,8 +178,6 @@ const markCompleted = async (id) => {
     console.error(error)
   }
 }
-
-
 
 
 onAuthStateChanged(auth, (user) => {

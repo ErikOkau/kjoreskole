@@ -3,7 +3,7 @@ import { RouterView } from 'vue-router';
 import NavBar from './components/NavBar.vue'
 import Footer from './components/Footer.vue'
 import Buttons from './components/Buttons.vue'
-
+import Chart from './components/chart.vue'
 
 </script>
 
@@ -16,6 +16,8 @@ import Buttons from './components/Buttons.vue'
 </div>
 
 <Footer />
+
+
  
 </template>
 

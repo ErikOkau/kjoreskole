@@ -107,6 +107,7 @@ onMounted(() => {
     courses.forEach((doc) => {
       kjøretimer.value.push({
         id: doc.id,
+        Status: ref(doc.data().Status), // Add the status to the kjøretimer array
         ...doc.data(),
       })
     })
@@ -174,6 +175,11 @@ const markCompleted = async (id) => {
     if (index !== -1) {
       kjøretimer.value[index].Status = 'Completed'
     }
+    console.log(id)
+    console.log(kjøretimer.value[index].Status)
+    console.log(kjøretimer.value[index])
+    console.log(kjøretimer.value)
+    console.log(kjøretimer.value[index].id)
   } catch (error) {
     console.error(error)
   }
@@ -190,16 +196,14 @@ onAuthStateChanged(auth, (user) => {
     }
 })
 
+
 </script>
 
 <template>
 
     <div class="loggedin">
-        <form 
-        @submit.prevent="sendForm"
-        >
-            <div class="flexer">
-                <div class="header">
+      <div class="flexer">
+        <div class="header">
                     <h1>Kjøretimer</h1>
                 </div>
                 <div class="flexer2">
@@ -221,7 +225,7 @@ onAuthStateChanged(auth, (user) => {
                             </thead>
                             <tbody>
                                 <tr v-for="form in ongoingCourses">
-                                    <td>{{ form.Elev }}</td>
+                                    <td>{{ form.elevId }}</td>
                                     <td>{{ form.Type_førerkort }}</td>
                                     <td>{{ form.Dato }}</td>
                                     <td>{{ form.Tid }}</td>
@@ -265,8 +269,9 @@ onAuthStateChanged(auth, (user) => {
                         </div>
                     </div>
                 </div>
-            
-
+        <form 
+        @submit.prevent="sendForm"
+        >
                 <div class="flex">
 
                     <div class="tittel">
@@ -302,10 +307,9 @@ onAuthStateChanged(auth, (user) => {
                         </div>
                     </div>
                 </div>
-            </div> 
-
+  
         </form>
-        
+      </div> 
     </div>
    
     

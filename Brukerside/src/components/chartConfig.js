@@ -42,19 +42,18 @@ onAuthStateChanged(auth, async (user) => {
   }
 })
 
-
 export const data = {
   labels: ['Kjøretimer'],
   datasets: [
     {
       label: 'Fullført',
       backgroundColor: 'green',
-      data: [completeCount],
+      data: [completeCount.value],
     },
     {
       label: 'Fremtidig',
       backgroundColor: 'red',
-      data: [countOngoing],
+      data: [countOngoing.value],
     },
   ],
 }

@@ -5,12 +5,13 @@
     import { onAuthStateChanged } from "firebase/auth" // Importing firebase authentication state change functionnpm ru
     import { Bar } from 'vue-chartjs'
     import Chart from '../components/chart.vue'
+    import { useRouter } from "vue-router" // Importing vue router function
 
-
+    const router = useRouter() // Creating a reference to the router function
     const forms = ref([]) // Creating a reactive reference for the 'forms' array
 
     function getData(uid) { // On component mount, fetch data from Firestore
-        const queryKjøretimer = query(collection(db, "Kjøretimer"), where("elevId", "==", uid)) // Querying the 'Kjøretimer' collection from Firestore
+        const queryKjøretimer = query(collection(db, "Kjøretimer"), where("elevId", "==", uid), where("Status", "==", "Ongoing")) // Querying the 'Kjøretimer' collection from Firestore
         
         onSnapshot(queryKjøretimer, (querySnapshot)=>{
             forms.value = []
@@ -35,6 +36,7 @@
         getData(user.uid)
     } else {
         console.log("No user is signed in")
+        router.push("/login")
     }
 })
 

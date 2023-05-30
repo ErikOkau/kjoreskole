@@ -80,6 +80,7 @@ async function sendForm() {
             Mobilnumber,
             Fullførte_kurs,
             Førerkort: selectedOption.value,
+            role: "user" // Setting the user role to "user"
         })
         formSend.value = true
 

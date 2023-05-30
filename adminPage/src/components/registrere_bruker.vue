@@ -22,6 +22,14 @@ async function registerUser() { // Define async function to register user
     // Update user profile display name
     await updateProfile(user, { displayName: username }) // Update user profile display name with username
     console.log("Successfully updated user profile:", user.displayName)
+
+     // Set the role or userType property to "admin"
+     await setDoc(doc(formRef, user.uid), {
+      email,
+      username,
+      role: "admin" // Set the role or userType property to "admin"
+    })
+    
     // Redirect to homepage
     router.push("/") // Redirect user to homepage after successful registration
   } catch (error) {

@@ -16,21 +16,28 @@ const loginForm = ref({
 })
 
 // Define the login function
-async function login() {
-  try {
-    // Destructure email and password from the loginForm reactive object
-    const { email, password } = loginForm.value
-    // Attempt to sign in with the given email and password
-    const userCredential = await signInWithEmailAndPassword(auth, email, password)
-    const user = userCredential.user
-    console.log("Successfully logged in as:", user.email)
-    // Redirect to the home page after successful login
-    router.push("/")
-  } catch (error) {
-    // Show error message to user
-    alert("Feil email eller passord", error)
+async function loginAsUser() {
+    try {
+        // Destructure email and password from the loginForm reactive object
+      const { email, password } = loginForm.value;
+       // Attempt to sign in with the given email and password
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      const user = userCredential.user
+
+      // Check if the user does not have the admin role or userType property
+      if (!user.role === 'admin' && !user.userType === 'admin') {
+        console.log("Successfully logged in as user:", user.email);
+        // Redirect to the brukerside page after successful login
+        router.push("/brukerside");
+      } else {
+        // Show error message to user
+        alert("You do not have permission to access the brukerside page.");
+      }
+    } catch (error) {
+      // Show error message to user
+      alert("Feil email eller passord", error);
+    }
   }
-}   
 
 </script>
 
@@ -48,7 +55,7 @@ async function login() {
     <!-- Bind the password input to the loginForm reactive object -->
     <input v-model="loginForm.password" type="password" color="black">
 
-    <button class="login_button" @click="login">Logg inn</button>
+    <button class="login_button" @click="loginAsUser">Logg inn</button>
 
 </div>
 </template>

@@ -16,16 +16,24 @@ const loginForm = ref({
 })
 
 // Define the login function
-async function login() {
+async function loginAsAdmin() {
   try {
     // Destructure email and password from the loginForm reactive object
     const { email, password } = loginForm.value
     // Attempt to sign in with the given email and password
     const userCredential = await signInWithEmailAndPassword(auth, email, password)
     const user = userCredential.user
-    console.log("Successfully logged in as:", user.email)
-    // Redirect to the home page after successful login
-    router.push("/")
+
+    // Check if the user has the admin role or userType property
+    if (user.role === 'admin' || user.userType === 'admin') {
+        console.log("Successfully logged in as admin:", user.email);
+        // Redirect to the admin page after successful login
+        router.push("/");
+      } else {
+        // Show error message to user
+        alert("You do not have permission to access the admin page.");
+      }
+
   } catch (error) {
     // Show error message to user
     alert("Feil email eller passord", error)
@@ -48,7 +56,7 @@ async function login() {
     <!-- Bind the password input to the loginForm reactive object -->
     <input v-model="loginForm.password" type="password" color="black">
 
-    <button class="login_button" @click="login">Logg inn</button>
+    <button class="login_button" @click="loginAsAdmin">Logg inn</button>
 
     <div class="Registrere_bruker">
         <RouterLink to="/signup">Ikke bruker? Registrer nå</RouterLink>

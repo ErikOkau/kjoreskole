@@ -2,8 +2,8 @@
 
 // Importing the necessary components and firebase functionalities
 import Input from '../components/input.vue'
-import LicenceTypes from '../components/licenceTypes.vue';
-import RadioInput from '../components/radioInput.vue';
+import LicenceTypes from '../components/licenceTypes.vue'
+import RadioInput from '../components/radioInput.vue'
 import { collection, 
         setDoc, 
         doc 
@@ -44,6 +44,7 @@ const form = ref({
     Mail: "",
     Mobilnumber: "",
     Fullførte_kurs: "0",
+    user: ""
 })
 
 // Creating a reference to the "brukere" collection in Firestore

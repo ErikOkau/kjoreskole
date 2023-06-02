@@ -2,34 +2,32 @@
 
 import { ref } from 'vue'
 import router  from "../router" // Import Vue Router to redirect to homepage
+import { collection, setDoc, doc, getDocs, deleteDoc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { 
     createUserWithEmailAndPassword, // Import Firebase Auth method for user registration
     updateProfile // Import Firebase Auth method for updating user profile
 } from 'firebase/auth' 
-import { auth } from '../firebase/firebase.js' // Import Firebase authentication instance
+import { auth, db } from '../firebase/firebase.js' // Import Firebase authentication instance
 
 const registrationForm = ref({ // Declare reactive registration form object
   email: "",
   password: ""
 })
 
+const brukerRef = collection(db, 'brukere')
+
 async function registerUser() { // Define async function to register user
   try {
     const { email, password, username } = registrationForm.value // Get user email and password from registration form
     const userCredential = await createUserWithEmailAndPassword(auth, email, password) // Create Firebase user credential with email and password
-    const user = userCredential.user // Get the Firebase user object
-    console.log("Successfully registered user:", user.email)
-    // Update user profile display name
-    await updateProfile(user, { displayName: username }) // Update user profile display name with username
-    console.log("Successfully updated user profile:", user.displayName)
+    const user = userCredential.user
 
-     // Set the role or userType property to "admin"
-     await setDoc(doc(formRef, user.uid), {
-      email,
-      username,
-      role: "admin" // Set the role or userType property to "admin"
+    await setDoc(doc(brukerRef, user.uid), { // Create user profile in Firestore database
+      email: user.email,
+      role: "admin"
     })
-    
+
+
     // Redirect to homepage
     router.push("/") // Redirect user to homepage after successful registration
   } catch (error) {

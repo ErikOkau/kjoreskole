@@ -42,7 +42,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 })
 
-export const data = {
+export const data = ref({
   labels: ['Kjøretimer'],
   datasets: [
     {
@@ -56,7 +56,7 @@ export const data = {
       data: [countOngoing.value],
     },
   ],
-}
+})
 
 export const options = {
   responsive: true,

@@ -2,7 +2,7 @@
 
 // Importing necessary components and libraries
 import Input from '../components/input.vue'
-import { collection, setDoc, doc, getDocs, deleteDoc, onSnapshot, updateDoc } from 'firebase/firestore'
+import { collection, setDoc, doc, getDocs, deleteDoc, onSnapshot, updateDoc, where, query } from 'firebase/firestore'
 import { db, auth } from '../firebase/firebase.js'
 import { ref, onMounted, computed } from "vue"
 import { onAuthStateChanged } from "firebase/auth" // Importing firebase authentication state change function
@@ -89,7 +89,7 @@ onMounted(async () => {
 
 // Fetching all Kjøretimer from firebase and pushing it to kjøretimer array
 onMounted(async () => {
-  const bestillingerSnapshot = await getDocs(collection(db, 'brukere'))
+  const bestillingerSnapshot = await getDocs(query(collection(db, "brukere"), where("role", "==", "user")))
   bestillingerSnapshot.forEach((doc) => {
     bestillinger.value.push({
       id: doc.id,
@@ -161,7 +161,7 @@ const deleteForm = (form) => {
 
 
 
-// Add this method to your script section
+// completed function for updating the status of the form to "Completed"
 const markCompleted = async (id) => {
   try {
     // Update the status of the form to "Completed" in the database
@@ -175,11 +175,6 @@ const markCompleted = async (id) => {
     if (index !== -1) {
       kjøretimer.value[index].Status = 'Completed'
     }
-    console.log(id)
-    console.log(kjøretimer.value[index].Status)
-    console.log(kjøretimer.value[index])
-    console.log(kjøretimer.value)
-    console.log(kjøretimer.value[index].id)
   } catch (error) {
     console.error(error)
   }
@@ -202,8 +197,7 @@ onAuthStateChanged(auth, (user) => {
 <template>
 
     <div class="loggedin">
-      <div class="flexer">
-        <div class="header">
+      <div class="header">
                     <h1>Kjøretimer</h1>
                 </div>
                 <div class="flexer2">
@@ -307,10 +301,11 @@ onAuthStateChanged(auth, (user) => {
                         </div>
                     </div>
                 </div>
-  
+          
+
         </form>
       </div> 
-    </div>
+
    
     
 

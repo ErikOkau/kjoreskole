@@ -207,7 +207,7 @@ form {
 }
 
 
-.wrap-bilder{
+.wrap-bilder {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

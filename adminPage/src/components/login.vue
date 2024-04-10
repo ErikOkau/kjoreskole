@@ -30,12 +30,7 @@ async function login() {
     const queryRef = query(usersCollection, where("email", "==", user.email), where ("role", "==", "admin"))
     const querySnapshot = await getDocs(queryRef)
 
-    if (querySnapshot.empty) {
-        signOut(auth)
-        // user do not have the admin role
-        alert("Du har ikke tilgang til denne siden")
-        return
-    }
+    
 
     console.log("Successfully logged in as:", user.email)
     // Redirect to the home page after successful login
